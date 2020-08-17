@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        vs: "./node_modules/monaco-editor/dev/vs"
+        vs: "./monaco-editor/dev/vs"
     }
 })
 require(["vs/editor/editor.main"], initEditor)
