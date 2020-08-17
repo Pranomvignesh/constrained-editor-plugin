@@ -4,7 +4,8 @@
   "description": "This is a proof of concept for monaco editor's custom library suggestions",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildAndRun":"npm install && npm start"
   },
   "repository": {
     "type": "git",
