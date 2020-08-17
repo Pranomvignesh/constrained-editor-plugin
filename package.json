@@ -1,0 +1,26 @@
+{
+  "name": "monaco_editor_template",
+  "version": "1.0.0",
+  "description": "This is a proof of concept for monaco editor's custom library suggestions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pranomvignesh/monaco_editor_template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pranomvignesh/monaco_editor_template/issues"
+  },
+  "homepage": "https://github.com/Pranomvignesh/monaco_editor_template#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "monaco-editor": "^0.20.0"
+  }
+}
