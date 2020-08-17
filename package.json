@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build":"npm install"
+    "build": "npm install && cp -r ./node_modules/monaco-editor/ ./monaco-editor"
   },
   "repository": {
     "type": "git",

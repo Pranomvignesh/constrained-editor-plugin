@@ -144,5 +144,5 @@ By this, we can create an `illusion`like, nothing is allowed to type in the rest
 
 This might become a solution to this [github issue](https://github.com/Microsoft/monaco-editor/issues/953)
 
-On cover :
+In cover :
 <span>Photo by <a href="https://unsplash.com/@baciutudor?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Tudor Baciu</a> on <a href="https://unsplash.com/s/photos/editor?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
