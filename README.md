@@ -140,6 +140,8 @@ By this, we can create an `illusion`like, nothing is allowed to type in the rest
 
 ### Might Solve this 
 
+<script src="https://gist.github.com/Pranomvignesh/efdb1516f6118ce2e940aff5361ea1c4.js"></script>
+
 This might become a solution to this [github issue](https://github.com/Microsoft/monaco-editor/issues/953)
 
 On cover :
