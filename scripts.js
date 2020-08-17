@@ -47,11 +47,6 @@ const editableArea = ((startPhrase,endPhrase) => {
         }
     }
 })(startPhrase,endPhrase);
-const isInBetween = function(value,lowerLimit,upperLimit){
-    return lowerLimit <= value && value <= upperLimit;
-}
-const isRestrictedPlaceModified = (changes) => changes.some(({ range }) => restrictedLines.includes(range))
-
 function initEditor(){
     const sampleJs = `
 /**
