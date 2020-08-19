@@ -1,0 +1,16 @@
+<h1 id="restrict-editable-area-in-monaco-editor">Restrict Editable Area in monaco editor</h1>
+<p>This tool converts a <code>simple set of instructions</code> to a restricted editable area along with the hold of values in the editable area</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-javascript">// This is the instruction
+function /*editableArea#funcName=fnName*/(/*editableArea#args=arg1,arg2*/){
+/*multiLineEditableArea#actualCode=//Enter your logic here*/
+}</code></pre>
+<pre><code class="language-javascript">// This is output in editor
+function fnName(arg1,arg2){
+//Enter your logic here
+}</code></pre>
+<p>Here, <code>fnName</code>,<code>arg1</code>,<code>arg2</code>, and inside the <code>{}</code> becomes editable, Rest places will not be editable (again creates an illusion of not editable)</p>
+<p><code>/* editableArea */</code> - creates a simple editable area with no fallbackContent</p>
+<p><code>/* editableArea#id1 */</code> - creates a simple editable area mapped with id <code>id1</code>, so that you will get that edited value alone during the onchange callback</p>
+<p><code>/* editableArea=fallbackContent */</code> - creates a simple editable area mapped with a fallback content, which will be populated initially</p>
+<p><code>/* multiLineEditableArea */</code> - all the above rules apply to this tag also. Purpose of this tag is to create multiline text which is not possible incase of <code>editableArea</code>;</p>

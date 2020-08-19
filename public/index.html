@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Restrict Editing in Monaco Editor</title>
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="./monaco-editor/min/vs/loader.js"></script>
     <script src="scripts.js" type="text/javascript"></script>
 </head>
-<body>
-    <div class="editorDiv"></div>
+<body class="layout">
+    <object data="./instructions.html" type="text/html"></object>
+    <button>Generate</button>
+    <div class="twoCols">
+        <div class="srcEditor"></div>
+        <div class="destEditor"></div>
+    </div>
 </body>
 </html>

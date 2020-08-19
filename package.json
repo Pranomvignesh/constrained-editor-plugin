@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm install && cp -r ./node_modules/monaco-editor/ ./monaco-editor"
+    "build": "npm install && cp -r ./node_modules/monaco-editor/ ./public/monaco-editor",
+    "start": "./node_modules/nodemon/bin/nodemon.js server.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,9 @@
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "monaco-editor": "^0.20.0"
+  },
+  "devDependencies": {
+    "marked": "^1.1.1",
+    "nodemon": "^2.0.4"
   }
 }
