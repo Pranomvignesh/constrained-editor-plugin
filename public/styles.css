@@ -1,6 +1,7 @@
-body{
+body {
     padding: 0px 25px;
 }
+
 .layout {
     display       : flex;
     flex-direction: column;
@@ -62,4 +63,28 @@ a::before {
     position       : absolute;
     left           : -10px;
     text-decoration: none;
+}
+
+.heading .info {
+    border       : 1px solid #404040;
+    border-radius: 50%;
+    width        : 20px;
+    height       : 20px;
+    position     : relative;
+    display      : inline-block;
+    text-align   : center;
+    cursor       : pointer;
+}
+
+.info:hover::after {
+    width     : 360px;
+    content   : 'See browser console while editing in output editor';
+    position  : absolute;
+    display   : inline-block;
+    background: #404040;
+    color     : #cecece;
+    padding   : 5px 10px;
+    left      : calc(100% + 10px);
+    top       : -5px;
+    font-size : 14px;
 }
