@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restrict Editing in Monaco Editor</title>
+    <title>Restrict Editable Area in Monaco Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="./monaco-editor/min/vs/loader.js"></script>
     <script src="scripts.js" type="text/javascript"></script>
 </head>
 <body class="layout">
-    <object data="./instructions.html" type="text/html"></object>
-    <button>Generate</button>
+    <div class="topic">
+        <h1>Restrict Editable Area in Monaco Editor</h1>
+        <a href="/instructions">Read Documentation</a>
+    </div>
     <div class="twoCols">
+        <div class="heading">Source : </div>
         <div class="srcEditor"></div>
+        <button onclick="generateEditor()">Generate</button>
+        <div class="heading">Output : </div>
         <div class="destEditor"></div>
     </div>
 </body>

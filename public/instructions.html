@@ -1,16 +1,119 @@
-<h1 id="restrict-editable-area-in-monaco-editor">Restrict Editable Area in monaco editor</h1>
-<p>This tool converts a <code>simple set of instructions</code> to a restricted editable area along with the hold of values in the editable area</p>
-<h2 id="example">Example</h2>
-<pre><code class="language-javascript">// This is the instruction
-function /*editableArea#funcName=fnName*/(/*editableArea#args=arg1,arg2*/){
-/*multiLineEditableArea#actualCode=//Enter your logic here*/
-}</code></pre>
-<pre><code class="language-javascript">// This is output in editor
-function fnName(arg1,arg2){
-//Enter your logic here
-}</code></pre>
-<p>Here, <code>fnName</code>,<code>arg1</code>,<code>arg2</code>, and inside the <code>{}</code> becomes editable, Rest places will not be editable (again creates an illusion of not editable)</p>
-<p><code>/* editableArea */</code> - creates a simple editable area with no fallbackContent</p>
-<p><code>/* editableArea#id1 */</code> - creates a simple editable area mapped with id <code>id1</code>, so that you will get that edited value alone during the onchange callback</p>
-<p><code>/* editableArea=fallbackContent */</code> - creates a simple editable area mapped with a fallback content, which will be populated initially</p>
-<p><code>/* multiLineEditableArea */</code> - all the above rules apply to this tag also. Purpose of this tag is to create multiline text which is not possible incase of <code>editableArea</code>;</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./prism.css" />
+    <script type="text/javascript" src="./prism.js"></script>
+    <style>
+        body {
+            padding: 0px 25px;
+        }
+
+        h1,
+        p,
+        h2,
+        a,
+        .highlight {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .highlight {
+            padding: 3px 3px 3px 5px;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .highlight:hover::before {
+            height: 10px;
+        }
+
+        .highlight::before {
+            content: '';
+            position: absolute;
+            background: #81C78490;
+            height: 3px;
+            left: 0px;
+            width: 100%;
+            bottom: 0px;
+            transition: height 0.3s;
+            z-index: 0;
+            cursor: pointer;
+        }
+
+        .token.comment {
+            color: #4caf50;
+        }
+
+        .token.parameter,
+        .token.punctuation {
+            color: #dd4a68;
+        }
+
+        .language-javascript {
+            border: none;
+        }
+
+        .topic {
+            display: flex;
+            align-items: baseline;
+        }
+
+        a {
+            position: relative;
+            margin-left: 10px;
+        }
+
+        a::before {
+            content: '-';
+            position: absolute;
+            left: -10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topic">
+        <h1 id="restrict-editable-area-in-monaco-editor"> Restrict Editable Area in Monaco Editor </h1>
+        <a href="/">Playground</a>
+    </div>
+    <p> This tool converts a <code class="highlight"> simple set of instructions </code> to a restricted editable area
+        along with the hold of values in the editable area</p>
+    <h2 id="example"> Example </h2>
+    <pre>
+        <code class="language-javascript line-numbers"> 
+            // This is the instruction
+            function /*editableArea#funcName=fnName*/ ( /*editableArea#args=arg1,arg2*/ ) {
+                /*multiLineEditableArea#actualCode=//Enter your logic here*/
+            } 
+        </code> 
+    </pre>
+    <pre>
+        <code class="language-javascript line-numbers"> 
+            // This is output in editor
+            function fnName(arg1, arg2) {
+                //Enter your logic here
+            }
+        </code>
+    </pre>
+    <p> Here, <code class="highlight"> fnName </code>, <code class="highlight">arg1</code> , <code class="highlight">
+            arg2</code>, and inside the <code class="highlight">{ }</code>becomes
+        editable, Rest places will not be editable(again creates an illusion of not editable)</p>
+    <p> <code class="language-javascript"> /* editableArea */ </code> - creates a simple editable area with no
+        fallbackContent</p>
+    <p> <code class="language-javascript"> /* editableArea#id1 */</code> - creates a simple editable area mapped
+        with id <code class="highlight">id1</code> ,so that you will get that edited value alone during the onchange
+        callback </p>
+    <p> <code class="language-javascript"> /* editableArea=fallbackContent */ </code> - creates a simple
+        editable area mapped with a fallback content, which will be populated initially</p>
+    <p> <code class="language-javascript"> /* multiLineEditableArea */ </code> - all the above rules apply to
+        this tag also. Purpose of this tag is to create multiline text which is not possible incase of
+        <code class="highlight">editableArea</code>; </p>
+</body>
+
+</html>

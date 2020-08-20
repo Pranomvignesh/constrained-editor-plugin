@@ -1,7 +1,65 @@
 body{
-    margin: 0;
-    height: 100vh;
+    padding: 0px 25px;
 }
-.editorDiv{
-    height:100%;
+.layout {
+    display       : flex;
+    flex-direction: column;
+    height        : 100vh;
+    font-family   : 'Montserrat', sans-serif;
+}
+
+h1 {
+    flex: 0 0 auto;
+}
+
+.heading {
+    font-size    : 18px;
+    font-weight  : 900;
+    margin-bottom: 10px;
+}
+
+button {
+    width      : 100px;
+    align-self : center;
+    border     : none;
+    padding    : 10px 15px;
+    font-size  : 16px;
+    font-family: 'Montserrat', sans-serif;
+    background : #4CAF50;
+    color      : white;
+    font-weight: 600;
+    margin     : 10px 0px;
+    cursor     : pointer;
+    outline    : none;
+}
+
+.twoCols {
+    display       : flex;
+    flex          : 1 1 100%;
+    width         : 100%;
+    margin-bottom : 20px;
+    flex-direction: column;
+}
+
+.srcEditor,
+.destEditor {
+    flex  : 1 1 100%;
+    border: 1px solid #404040;
+}
+
+.topic {
+    display    : flex;
+    align-items: baseline;
+}
+
+a {
+    position   : relative;
+    margin-left: 10px;
+}
+
+a::before {
+    content        : '-';
+    position       : absolute;
+    left           : -10px;
+    text-decoration: none;
 }
