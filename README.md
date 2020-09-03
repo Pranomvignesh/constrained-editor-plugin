@@ -1,7 +1,7 @@
 # Restrict the Editable area in the monaco editor <!-- omit in toc -->
 
 
-This application shows how we can restrict editing of certain places in monaco editor. To see the demo [click here](./index.html);
+This application shows how we can restrict editing of certain places in monaco editor. To see the demo [click here](https://restrict-editarea-monaco-editor.vercel.app/);
 
 ## Table of Contents <!-- omit in toc -->
 
