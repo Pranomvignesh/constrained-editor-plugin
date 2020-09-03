@@ -146,7 +146,7 @@ By this, we can create an `illusion`like, nothing is allowed to type in the rest
 
 ### Use Cases
 
-- If you are trying to design an online coding interview platform using monaco editor and you wish to allow the canditates to edit only certain places, This can be used
+- If you are trying to design an online coding interview platform using monaco editor and you wish to allow the candidates to edit only certain places, This can be used
 
 ### Future Ideas
 
