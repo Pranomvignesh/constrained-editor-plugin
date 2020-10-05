@@ -26,7 +26,7 @@ function restrictEditArea (value) {
         }
     })();
     editable.add('singleLine', 'editableArea', '(.*?)')
-    editable.add('multiLine', 'multiLineEditableArea', '(^.*?$\\n)*', { consumeSpace: true })
+    editable.add('multiLine', 'multiLineEditableArea', '((^.*?$\\n)*)', { consumeSpace: true })
     const generateRegexFromValue = (string, {
         singleLine,
         multiLine
