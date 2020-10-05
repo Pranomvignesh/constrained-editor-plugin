@@ -156,8 +156,7 @@ By this, we can create an `illusion`like, nothing is allowed to type in the rest
 
 ### Intro
 
-This post is continuation of the previous post, which you can see here
-{% post https://dev.to/pranomvignesh/restrict-editable-area-in-monaco-editor-4hac %}
+This post is continuation of the previous post, which you can see [here](https://dev.to/pranomvignesh/restrict-editable-area-in-monaco-editor-4hac)
 
 ### What's new?
 
