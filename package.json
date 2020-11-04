@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm install && cp -r ./node_modules/monaco-editor/ ./public/monaco-editor",
-    "start": "./node_modules/nodemon/bin/nodemon.js server.js"
+    "start": "./node_modules/nodemon/bin/nodemon.js server.js",
+    "startAsFresh": "npm run build && npm run start"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,7 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
-    "monaco-editor": "^0.20.0"
+    "monaco-editor": "^0.21.2"
   },
   "devDependencies": {
     "marked": "^1.1.1",
