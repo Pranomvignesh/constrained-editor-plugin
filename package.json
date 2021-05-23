@@ -1,33 +1,46 @@
 {
-  "name": "monaco_editor_template",
+  "name": "@pranomvignesh/editable-area-restrictor-plugin",
   "version": "1.0.0",
-  "description": "This is a proof of concept for monaco editor's custom library suggestions",
-  "main": "index.js",
+  "description": "A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only",
+  "main": "./src/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "exports": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm install && cp -r ./node_modules/monaco-editor/ ./public/monaco-editor",
-    "start": "./node_modules/nodemon/bin/nodemon.js server.js",
-    "startAsFresh": "npm run build && npm run start"
+    "commit": "git-cz",
+    "release": "standard-version",
+    "amend": "git commit . --amend -m \"$(git log -1 --pretty=%B)\"",
+    "dev": "MODE=development webpack --watch --mode=development -c './src/webpack.config.js'",
+    "bundle": "MODE=production webpack --mode=production -c './src/webpack.config.js' && MODE=development webpack --mode=development -c './src/webpack.config.js'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pranomvignesh/monaco_editor_template.git"
+    "url": "git+https://github.com/Pranomvignesh/restrict_editarea_monaco_editor.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "monaco-editor",
+    "restrictions-in-editor",
+    "edit-area-restriction"
+  ],
+  "author": "VIGNESH. P <pranomvignesh@gmail.com>",
   "license": "ISC",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "bugs": {
-    "url": "https://github.com/Pranomvignesh/monaco_editor_template/issues"
+    "url": "https://github.com/Pranomvignesh/restrict_editarea_monaco_editor/issues"
   },
-  "homepage": "https://github.com/Pranomvignesh/monaco_editor_template#readme",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "http": "0.0.1-security",
-    "monaco-editor": "^0.21.2"
-  },
+  "homepage": "https://github.com/Pranomvignesh/restrict_editarea_monaco_editor#readme",
   "devDependencies": {
-    "marked": "^1.1.1",
-    "nodemon": "^2.0.4"
+    "commitizen": "4.2.4",
+    "copy-webpack-plugin": "7.0.0",
+    "cz-conventional-changelog": "3.3.0",
+    "jasmine": "3.7.0",
+    "webpack": "5.37.1",
+    "webpack-cli": "4.7.0"
   }
 }
