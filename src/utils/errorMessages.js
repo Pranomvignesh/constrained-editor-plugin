@@ -11,9 +11,10 @@ export const INVALID_VALUE = function (key, object) {
 export const VALUE_EXISTS = function (type, object) {
   return type + ' already exists' + (object && ' in ' + object) + '. Please try another name'
 }
-export default errorMessages = {
+const errorMessages = {
   MISSING_KEY,
   TYPE_MUST_BE,
   INVALID_VALUE,
   VALUE_EXISTS
-}
+};
+export default errorMessages;

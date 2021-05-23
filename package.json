@@ -8,10 +8,11 @@
   },
   "exports": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/live-server --entry-file=./test/index.html --port=6060 --open=/?random=false",
     "commit": "git-cz",
     "release": "standard-version",
     "amend": "git commit . --amend -m \"$(git log -1 --pretty=%B)\"",
+    "serveSamples":"./node_modules/.bin/live-server --entry-file=./sample/index.html --port=5050",
     "dev": "MODE=development webpack --watch --mode=development -c './src/webpack.config.js'",
     "bundle": "MODE=production webpack --mode=production -c './src/webpack.config.js' && MODE=development webpack --mode=development -c './src/webpack.config.js'"
   },
@@ -40,6 +41,8 @@
     "copy-webpack-plugin": "7.0.0",
     "cz-conventional-changelog": "3.3.0",
     "jasmine": "3.7.0",
+    "live-server": "1.2.1",
+    "monaco-editor": "0.24.0",
     "webpack": "5.37.1",
     "webpack-cli": "4.7.0"
   }

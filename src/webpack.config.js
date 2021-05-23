@@ -8,14 +8,15 @@ module.exports = [{
   target: 'web',
   devtool: "source-map",
   entry: {
-    'index': path.join(__dirname, SRC_PATH, 'index.js'),
+    'restrictor': path.join(__dirname, SRC_PATH, 'index.js'),
   },
   output: {
     filename: process.env.MODE === 'production' ? '[name].min.js' : '[name].js',
-    library: 'restrictedEditor',
-    libraryExport: 'default',
-    libraryTarget: 'umd',
-    globalObject: 'this'
+    library: {
+      name : 'restrictor',
+      type : 'window',
+      export : 'default'
+    },
   }
 }, {
   entry: {},

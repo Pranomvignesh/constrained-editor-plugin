@@ -27,7 +27,7 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
     }
   });
   model._restrictedModel = true;
-  model._internalUndo = false;
+  model.editInReadOnlyArea = false;
   model._isCursorAtCheckPoint = function (positions) {
     positions.some(function (position) {
       const posLineNumber = position.lineNumber;
@@ -47,12 +47,12 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
   };
   model._restrictionChangeListener = model.onDidChangeContent(function (contentChangedEvent) {
     const isUndoing = contentChangedEvent.isUndoing;
-    if (!(isUndoing && model._internalUndo)) {
+    if (!(isUndoing && model.editInReadOnlyArea)) {
       const doUndo = function () {
         return Promise.resolve().then(function () {
-          model._internalUndo = true;
+          model.editInReadOnlyArea = true;
           model.undo();
-          model._internalUndo = false;
+          model.editInReadOnlyArea = false;
         });
       };
       const updateRange = function (restriction, range, finalLine, finalColumn, changes, changeIndex) {
@@ -223,6 +223,12 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
       }
     }
   });
+  model._getCurrentRanges = function(){
+    return restrictions.reduce(function (acc, restriction) {
+      acc[restriction.label] = restriction.range;
+      return acc;
+    }, {});
+  }
   model.getValueInEditableRange = function () {
     return restrictions.reduce(function (acc, restriction) {
       acc[restriction.label] = model.getValueInRange(restriction.range);
@@ -231,7 +237,7 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
   }
   model.disposeRestrictions = function () {
     delete model._restrictedModel;
-    delete model._internalUndo;
+    delete model.editInReadOnlyArea;
     delete model._isCursorAtCheckPoint;
     delete model._currentCursorPositions;
     model._restrictionChangeListener.dispose();

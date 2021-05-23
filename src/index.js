@@ -1,7 +1,7 @@
 import checkType from './utils/checkType.js';
 import { TYPE_MUST_BE } from "./utils/errorMessages.js";
-import { restrictEditArea, removeEditAreaRestriction } from "./utils/restrictEditArea.js";
-export const restrictedEditor = function (_injectedConstructors) {
+import restrictEditArea from "./utils/restrictEditArea.js";
+export default function restrictedEditor(_injectedConstructors) {
   /**
    * Custom Type Declarations 
    */
@@ -21,8 +21,8 @@ export const restrictedEditor = function (_injectedConstructors) {
       allowMultiline: type.boolean
     }
   })
-  type.$extend.object('editableRanges', {
-    everyValue: type.editableRange
+  type.$extend.array('editableRanges', {
+    every: type.editableRange
   })
   type.$extend.object('requiredConstructors', {
     required: {
@@ -103,7 +103,7 @@ export const restrictedEditor = function (_injectedConstructors) {
     return isModelValid(model, function (model) {
       if (type.editableRanges(ranges)) {
         const restrictedModel = restrictEditArea(model, ranges, _injectedConstructors.range);
-        _uriRestrictionMap[restrictedModel.getUri().toString()] = restrictedModel;
+        _uriRestrictionMap[restrictedModel.uri.toString()] = restrictedModel;
         return restrictedModel;
       } else {
         throw new Error('Ranges Object is Invalid. Please Refer the documentation');
@@ -120,7 +120,7 @@ export const restrictedEditor = function (_injectedConstructors) {
   }
   const removeRestrictions = function (model) {
     return isModelValid(model, function (model) {
-      const uri = model.getUri().toString();
+      const uri = model.uri.toString();
       const restrictedModel = _uriRestrictionMap[uri];
       if (restrictedModel) {
         restrictedModel.disposeRestrictions();
@@ -165,5 +165,3 @@ export const restrictedEditor = function (_injectedConstructors) {
   }
   return Object.freeze(API);
 };
-
-export default restrictedEditor;
