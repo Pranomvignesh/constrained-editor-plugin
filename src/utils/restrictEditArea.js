@@ -46,6 +46,7 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
     });
   };
   model._restrictionChangeListener = model.onDidChangeContent(function (contentChangedEvent) {
+    debugger
     const isUndoing = contentChangedEvent.isUndoing;
     if (!(isUndoing && model.editInReadOnlyArea)) {
       const doUndo = function () {
@@ -183,7 +184,7 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
             if (text !== '') {
               finalLine -= lineDiffInRange;
               if (lineDiffInRange > 0 && editedRange.endLineNumber === range.endLineNumber) {
-                finalColumn = editedRange.startColumn + range.endColumn - editedRange.endColumn;
+                finalColumn = editedRange.startColumn + finalColumn - editedRange.endColumn;
               }
               const match = text.match(/\n/g);
               let noOfLinesAdded = match ? match.length : 0;
@@ -198,7 +199,7 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
               if (range.startLineNumber < range.endLineNumber || range.startColumn < range.endColumn) {
                 finalLine -= lineDiffInRange;
                 if (editedRange.endLineNumber === range.endLineNumber) {
-                  finalColumn = editedRange.startColumn + range.endColumn - editedRange.endColumn;
+                  finalColumn = editedRange.startColumn + finalColumn - editedRange.endColumn;
                 }
               }
             } else {
