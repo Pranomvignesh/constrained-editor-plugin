@@ -7,3 +7,9 @@ body{
   height: 600px;
   border: 1px solid red;
 }
+.singleLineEditableArea {
+  background: rgb(146, 204, 146);
+}
+.multiLineEditableArea {
+  background: rgb(228, 182, 140);
+}

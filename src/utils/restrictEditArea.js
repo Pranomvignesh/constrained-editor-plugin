@@ -1,4 +1,4 @@
-export default function restrictEditArea (model, ranges, rangeConstructor) {
+export default function restrictEditArea (model, ranges, rangeConstructor, instance) {
   const restrictions = ranges.slice();
   const sortRangesInAscendingOrder = function (rangeObject1, rangeObject2) {
     const rangeA = rangeObject1.range;
@@ -46,7 +46,6 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
     });
   };
   model._restrictionChangeListener = model.onDidChangeContent(function (contentChangedEvent) {
-    debugger
     const isUndoing = contentChangedEvent.isUndoing;
     if (!(isUndoing && model.editInReadOnlyArea)) {
       const doUndo = function () {
@@ -85,7 +84,6 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
           });
           changesLength = changes.length;
         }
-
         if (diffInRow !== 0) {
           for (let i = restriction.index + 1; i < length; i++) {
             const nextRestriction = restrictions[i];
@@ -169,62 +167,121 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
         }
         return false;
       })
+      const getInfoFrom = function (change, editableRange) {
+        const info = {};
+        const range = change.range;
+        // Get State
+        if (change.text === '') {
+          info.isDeletion = true;
+        } else if (
+          (range.startLineNumber === range.endLineNumber) &&
+          (range.startColumn === range.endColumn)
+        ) {
+          info.isAddition = true;
+        } else {
+          info.isReplacement = true;
+        }
+        // Get Position Of Range
+        info.startLineOfRange = range.startLineNumber === editableRange.startLineNumber;
+        info.startColumnOfRange = range.startColumn === editableRange.startColumn;
 
+        info.endLineOfRange = range.endLineNumber === editableRange.endLineNumber;
+        info.endColumnOfRange = range.endColumn === editableRange.endColumn;
+
+        info.middleLineOfRange = !info.startLineOfRange && !info.endLineOfRange;
+
+        // Editable Range Span
+        if (editableRange.startLineNumber === editableRange.endLineNumber) {
+          info.rangeIsSingleLine = true;
+        } else {
+          info.rangeIsMultiLine = true;
+        }
+        return info;
+      }
       if (isAllChangesValid) {
         changes.forEach(function (change, changeIndex) {
-          const editedRange = change.range;
-          const rangeAsString = editedRange.toString();
-          const restriction = rangeMap[rangeAsString];
-          const range = restriction.range;
-          if (restriction.allowMultiline) {
-            const lineDiffInRange = editedRange.endLineNumber - editedRange.startLineNumber;
-            let finalLine = range.endLineNumber;
-            let finalColumn = range.endColumn;
-            let text = change.text || '';
-            if (text !== '') {
-              finalLine -= lineDiffInRange;
-              if (lineDiffInRange > 0 && editedRange.endLineNumber === range.endLineNumber) {
-                finalColumn = editedRange.startColumn + finalColumn - editedRange.endColumn;
-              }
-              const match = text.match(/\n/g);
-              let noOfLinesAdded = match ? match.length : 0;
-              let noOfColumnAdded = text.split(/\n/g).pop().length;
-              finalLine += noOfLinesAdded;
-              if (editedRange.endLineNumber === range.endLineNumber) {
-                if (noOfLinesAdded > 0) {
-                  finalColumn = 0;
-                }
-                finalColumn += (noOfColumnAdded + 1);
-              }
-              if (range.startLineNumber < range.endLineNumber || range.startColumn < range.endColumn) {
-                finalLine -= lineDiffInRange;
-                if (editedRange.endLineNumber === range.endLineNumber) {
-                  finalColumn = editedRange.startColumn + finalColumn - editedRange.endColumn;
-                }
-              }
-            } else {
-              if (range.startLineNumber < range.endLineNumber || range.startColumn < range.endColumn) {
-                finalLine -= lineDiffInRange;
-                if (editedRange.endLineNumber === range.endLineNumber) {
-                  const diffInColumn = range.endColumn - editedRange.endColumn;
-                  finalColumn = editedRange.startColumn + (diffInColumn === 0 ? 0 : diffInColumn);
+          const changedRange = change.range;
+          const restriction = rangeMap[changedRange.toString()];
+          const editableRange = restriction.range;
+          const text = change.text || '';
+          /**
+           * Things to check before implementing the change
+           * - A | D | R => Addition | Deletion | Replacement
+           * - MC | SC => MultiLineChange | SingleLineChange
+           * - SOR | MOR | EOR => Change Occured in - Start Of Range | Middle Of Range | End Of Range
+           * - SSL | SML => Editable Range - Spans Single Line | Spans Multiple Line
+           */
+          const noOfLinesAdded = (text.match(/\n/g) || []).length;
+          const noOfColsAddedAtLastLine = text.split(/\n/g).pop().length;
+
+          const lineDiffInRange = changedRange.endLineNumber - changedRange.startLineNumber;
+          const colDiffInRange = changedRange.endColumn - changedRange.startColumn;
+
+          let finalLine = editableRange.endLineNumber;
+          let finalColumn = editableRange.endColumn;
+
+          let columnsCarriedToEnd = 0;
+          if (
+            (editableRange.endLineNumber === changedRange.startLineNumber) ||
+            (editableRange.endLineNumber === changedRange.endLineNumber)
+          ) {
+            columnsCarriedToEnd += (editableRange.endColumn - changedRange.startColumn) + 1;
+          }
+
+          const info = getInfoFrom(change, editableRange);
+          if (info.isAddition || info.isReplacement) {
+            if (info.rangeIsSingleLine) {
+              /**
+               * Only Column Change has occured , so regardless of the position of the change
+               * Addition of noOfCols is enough
+               */
+              if (noOfLinesAdded === 0) {
+                finalColumn += noOfColsAddedAtLastLine;
+              } else {
+                finalLine += noOfLinesAdded;
+                if (info.startColumnOfRange) {
+                  finalColumn += noOfColsAddedAtLastLine
+                } else if (info.endColumnOfRange) {
+                  finalColumn = (noOfColsAddedAtLastLine + 1)
+                } else {
+                  finalColumn = (noOfColsAddedAtLastLine + columnsCarriedToEnd)
                 }
               }
             }
-            updateRange(restriction, range, finalLine, finalColumn, changes, changeIndex);
-          } else {
-            const changesToAddToColumn = (change.rangeLength * -1) + change.text.length;
-            let finalLine = range.endLineNumber;
-            let finalColumn = range.endColumn + changesToAddToColumn;
-            updateRange(restriction, range, finalLine, finalColumn, changes, changeIndex);
+            if (info.rangeIsMultiLine) {
+              // Handling for Start Of Range is not required
+              finalLine += noOfLinesAdded;
+              if (info.endLineOfRange) {
+                if (noOfLinesAdded === 0) {
+                  finalColumn += noOfColsAddedAtLastLine;
+                } else {
+                  finalColumn = (columnsCarriedToEnd + noOfColsAddedAtLastLine);
+                }
+              }
+            }
           }
-        });
+          if (info.isDeletion || info.isReplacement) {
+            if (info.rangeIsSingleLine) {
+              finalColumn -= colDiffInRange;
+            }
+            if (info.rangeIsMultiLine) {
+              if (info.endLineOfRange) {
+                finalLine -= lineDiffInRange;
+                finalColumn -= colDiffInRange;
+              } else {
+                finalLine -= lineDiffInRange;
+              }
+            }
+          }
+          updateRange(restriction, editableRange, finalLine, finalColumn, changes, changeIndex);
+        })
       } else {
         doUndo();
       }
     }
+    model.updateHighlight();
   });
-  model._getCurrentRanges = function(){
+  model._getCurrentRanges = function () {
     return restrictions.reduce(function (acc, restriction) {
       acc[restriction.label] = restriction.range;
       return acc;
@@ -247,5 +304,95 @@ export default function restrictEditArea (model, ranges, rangeConstructor) {
     delete model.getValueInEditableRange;
     return model;
   }
+  model._oldDecorations = null;
+  model.updateHighlight = function () {
+    const newDecorations = restrictions.map(function (restriction) {
+      const range = restriction.range;
+      return {
+        range: restriction.range,
+        options: {
+          className: restriction.allowMultiline ? 'multiLineEditableArea' : 'singleLineEditableArea'
+        }
+      }
+    });
+    if (!model._oldDecorations) {
+      model._oldDecorations = []
+    }
+    instance.deltaDecorations(model._oldDecorations, newDecorations);
+    model._oldDecorations = newDecorations;
+  }
+  model.updateHighlight();
   return model;
 }
+
+
+
+
+// const editedRange = change.range;
+//           const rangeAsString = editedRange.toString();
+//           const restriction = rangeMap[rangeAsString];
+//           const range = restriction.range;
+//           if (restriction.allowMultiline) {
+//             const lineDiffInRange = editedRange.endLineNumber - editedRange.startLineNumber;
+//             let finalLine = range.endLineNumber;
+//             let finalColumn = range.endColumn;
+//             let text = change.text || '';
+//             if (text !== '') {
+
+
+
+
+//               /**
+//                * Determine how many lines and columns are added
+//                */
+//               const match = text.match(/\n/g) || [];
+//               let noOfLinesAdded = match.length;
+//               let noOfColumnAdded = text.split(/\n/g).pop().length;
+//               finalLine += noOfLinesAdded;
+//               // Column Change occurs only when the change happens in the last line
+//               if (editedRange.endLineNumber === range.endLineNumber) {
+//                 if (noOfLinesAdded > 0) {
+//                   finalColumn = (model.getLineMaxColumn(finalLine) - editedRange.endColumn);
+//                 }
+//                 finalColumn += (noOfColumnAdded + 1);
+//               }
+
+
+//               // /**
+//               //  * If there are replacements then the range will not be the same and
+//               //  * those values should be negated from the finalLine
+//               //  */
+//               // finalLine -= lineDiffInRange;
+//               // if (lineDiffInRange > 0 && editedRange.endLineNumber === range.endLineNumber) {
+//               //   finalColumn = editedRange.startColumn + finalColumn - editedRange.endColumn;
+//               // }
+
+
+//               // if (range.startLineNumber < range.endLineNumber || range.startColumn < range.endColumn) {
+//               //   finalLine -= lineDiffInRange;
+//               //   if (editedRange.endLineNumber === range.endLineNumber) {
+//               //     finalColumn = editedRange.startColumn + finalColumn - editedRange.endColumn;
+//               //   }
+//               // }
+//             } else {
+//               if (range.startLineNumber < range.endLineNumber || range.startColumn < range.endColumn) {
+//                 finalLine -= lineDiffInRange;
+//                 if (editedRange.endLineNumber === range.endLineNumber) {
+//                   const diffInColumn = range.endColumn - editedRange.endColumn;
+//                   finalColumn = editedRange.startColumn + (diffInColumn === 0 ? 0 : diffInColumn);
+//                 }
+//               }
+//             }
+//             updateRange(restriction, range, finalLine, finalColumn, changes, changeIndex);
+//           } else {
+//             const changesToAddToColumn = (change.rangeLength * -1) + change.text.length;
+//             let finalLine = range.endLineNumber;
+//             let finalColumn = range.endColumn + changesToAddToColumn;
+//             updateRange(restriction, range, finalLine, finalColumn, changes, changeIndex);
+//           }
+
+
+// 123
+// 4A
+// B
+// C56

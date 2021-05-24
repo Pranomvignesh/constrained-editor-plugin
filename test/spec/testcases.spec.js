@@ -1,5 +1,5 @@
 describe('Restrict Edit Area', function () {
-  var editorInstance, model, instanceOfRestrictor, monacoInstance;
+  var editorInstance, model, instanceOfRestrictor, monacoInstance, domNode;
   beforeAll(function (done) {
     require.config({ paths: { vs: '../node_modules/monaco-editor/min/vs' } });
     require(['vs/editor/editor.main'], function () {
@@ -38,7 +38,7 @@ describe('Restrict Edit Area', function () {
           allowMultiline: true
         }
       ]);
-      const domNode = editorInstance.getDomNode();
+      domNode = editorInstance.getDomNode();
       domNode.addEventListener('mousedown', function () {
         console.log(editorInstance.getPosition());
       })
@@ -78,53 +78,906 @@ describe('Restrict Edit Area', function () {
       expect(expected).toEqual(model.getValueInEditableRange());
     })
   })
-  describe('Value Updation Check', function () {
-    describe('Update Value inside Editable Area', function () {
-      const defaultValueForValueInConsoleLog = 'Hello world!';
-      const testCasesForValueInConsoleLog = [
-        {
-          range: [2, 16, 2, 16],
-          text: 'Addition In Start-',
-          expectedValue: 'Addition In Start-' + defaultValueForValueInConsoleLog
-        },
-        {
-          range: [2, 22, 2, 22],
-          text: '-Addition In Mid-',
-          expectedValue: 'Hello -Addition In Mid-world!'
-        },
-        {
-          range: [2, 29, 2, 29],
-          text: '-Addition In End',
-          expectedValue: defaultValueForValueInConsoleLog + '-Addition In End'
-        }
-      ]
-      it('Update Value In Range "valueInConsoleLog"', function () {
-        testCasesForValueInConsoleLog.forEach(function (testCase) {
-          let range = testCase.range;
-          testCase.range = new monaco.Range(range[0], range[1], range[2], range[3]);
-          range = testCase.range;
-          editorInstance.setPosition({
-            lineNumber: range.startLineNumber,
-            column: range.startColumn
-          });
-          const domNode = editorInstance.getDomNode();
-          domNode.dispatchEvent(new Event('keydown'));
-          model.applyEdits([
-            { forceMoveMarkers: true, ...testCase }
+  describe('Updating Value', function () {
+    describe('Add Value in Single Line Range', function () {
+      describe('Single Line Change', function () {
+        let model, defaultValue, changeText = 'ABC';
+        beforeEach(function () {
+          defaultValue = [
+            '123'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 1, 4],
+              label: 'test'
+            }
           ]);
-          const { valueInConsoleLog } = model.getValueInEditableRange()
-          expect(function () {
-            const result = testCase.expectedValue === valueInConsoleLog;
-            const currentRanges = model._getCurrentRanges();
-            model.applyEdits([
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 1, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual(changeText + defaultValue);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 1, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABC23');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 4, 1, 4),
+            text: 'ABC'
+          }])
+          expect(model.getValue()).toEqual(defaultValue + changeText);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+      describe('Multi Line Change', function () {
+        let model, defaultValue, changeText = 'ABC\nDEF';
+        beforeEach(function () {
+          defaultValue = [
+            '123'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 1, 4],
+              label: 'test',
+              allowMultiline: true
+            }
+          ]);
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 1, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual(changeText + '123');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 1', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 1, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1' + changeText + '23');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 2', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 3, 1, 3),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('12' + changeText + '3');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 4, 1, 4),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123' + changeText);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+    })
+    describe('Add Value in Multi Line Range', function () {
+      describe('Single Line Change', function () {
+        let model, defaultValue, changeText = 'ABC';
+        beforeEach(function () {
+          defaultValue = [
+            '123',
+            '456'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 2, 4],
+              label: 'test'
+            }
+          ]);
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 1, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual(changeText + defaultValue);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 1', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 3, 1, 3),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('12ABC3\n456');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 2', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 2, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\n4ABC56');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 4, 2, 4),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual(defaultValue + changeText);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+      describe('Multi Line Change', function () {
+        let model, defaultValue, changeText = 'ABC\nDEF';
+        beforeEach(function () {
+          defaultValue = [
+            '123',
+            '456'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 2, 4],
+              label: 'test',
+              allowMultiline: true
+            }
+          ]);
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 1, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual(changeText + defaultValue);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 1', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 1, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1' + changeText + '23\n456');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 2', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 3, 2, 3),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\n45' + changeText + '6');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 4, 2, 4),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\n456' + changeText);
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+    })
+    describe('Delete Value in Single Line Range', function () {
+      let model, defaultValue, changeText = '';
+      beforeEach(function () {
+        defaultValue = [
+          '123456'
+        ].join('\n');
+        model = monaco.editor.createModel(defaultValue, 'javascript');
+        instanceOfRestrictor.addRestrictionsTo(model, [
+          {
+            range: [1, 1, 1, 7],
+            label: 'test'
+          }
+        ]);
+        editorInstance.setModel(model);
+      })
+      it('Start Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 1, 1, 4),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('456');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('Mid Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 2, 1, 5),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('156');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('End Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 5, 1, 7),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('1234');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+    })
+    describe('Delete Value in Multi Line Range', function () {
+      let model, defaultValue, changeText = '';
+      beforeEach(function () {
+        defaultValue = [
+          '123',
+          '456',
+          '789'
+        ].join('\n');
+        model = monaco.editor.createModel(defaultValue, 'javascript');
+        instanceOfRestrictor.addRestrictionsTo(model, [
+          {
+            range: [1, 1, 3, 4],
+            allowMultiline: true,
+            label: 'test'
+          }
+        ]);
+        editorInstance.setModel(model);
+      })
+      it('Start Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 1, 2, 1),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('456\n789');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('Mid Of Range - 1', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 2, 2, 2),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('156\n789');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('Mid Of Range - 2', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(2, 1, 2, 4),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('123\n\n789');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('Mid Of Range - 3', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 2, 3, 3),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('19');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('End Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(2, 1, 2, 2),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('123\n56\n789');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+    })
+    describe('Replace Value in Single Line Range', function () {
+      let model, defaultValue, changeText = 'ABC';
+      beforeEach(function () {
+        defaultValue = [
+          '123456'
+        ].join('\n');
+        model = monaco.editor.createModel(defaultValue, 'javascript');
+        instanceOfRestrictor.addRestrictionsTo(model, [
+          {
+            range: [1, 1, 1, 7],
+            label: 'test'
+          }
+        ]);
+        editorInstance.setModel(model);
+      })
+      it('Start Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 1, 1, 4),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('ABC456');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('Mid Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 2, 1, 5),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('1ABC56');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+      it('End Of Range', function () {
+        domNode.dispatchEvent(new Event('keydown'))
+        model.applyEdits([{
+          forceMoveMarkers: true,
+          range: new monaco.Range(1, 5, 1, 7),
+          text: changeText
+        }])
+        expect(model.getValue()).toEqual('1234ABC');
+        const currentRanges = model._getCurrentRanges();
+        expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+      })
+    })
+    describe('Replace Value in Multi Line Range', function () {
+      describe('Single Line Change', function () {
+        let model, defaultValue, changeText = 'ABCDEF';
+        beforeEach(function () {
+          defaultValue = [
+            '123',
+            '456',
+            '789'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 3, 4],
+              allowMultiline: true,
+              label: 'test'
+            }
+          ]);
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 2, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('ABCDEF456\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 1', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABCDEF56\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 2', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 1, 2, 4),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\nABCDEF\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 3', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 3, 3),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABCDEF9');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 1, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\nABCDEF56\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+      describe('Multi Line Change', function () {
+        let model, defaultValue, changeText = 'ABC\nDE\nF';
+        beforeEach(function () {
+          defaultValue = [
+            '123',
+            '456',
+            '789'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 3, 4],
+              allowMultiline: true,
+              label: 'test'
+            }
+          ]);
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 2, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('ABC\nDE\nF456\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 1', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABC\nDE\nF56\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 2', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 1, 2, 4),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\nABC\nDE\nF\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 3', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 3, 3),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABC\nDE\nF9');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 1, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\nABC\nDE\nF56\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+    })
+  })
+  describe('Cumulative Change Of Range', function () {
+    describe('Replace Value in Multi Line Range', function () {
+      describe('Single Line Change', function () {
+        let model, defaultValue, changeText = 'ABCDEF';
+        beforeEach(function () {
+          defaultValue = [
+            '123',
+            '456',
+            '789'
+          ].join('\n');
+          model = monaco.editor.createModel(defaultValue, 'javascript');
+          instanceOfRestrictor.addRestrictionsTo(model, [
+            {
+              range: [1, 1, 3, 4],
+              allowMultiline: true,
+              label: 'test'
+            }
+          ]);
+          editorInstance.setModel(model);
+        })
+        it('Start Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 1, 2, 1),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('ABCDEF456\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 1', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABCDEF56\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 2', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 1, 2, 4),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\nABCDEF\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('Mid Of Range - 3', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(1, 2, 3, 3),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('1ABCDEF9');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+        it('End Of Range', function () {
+          domNode.dispatchEvent(new Event('keydown'))
+          model.applyEdits([{
+            forceMoveMarkers: true,
+            range: new monaco.Range(2, 1, 2, 2),
+            text: changeText
+          }])
+          expect(model.getValue()).toEqual('123\nABCDEF56\n789');
+          const currentRanges = model._getCurrentRanges();
+          expect(currentRanges.test.toString()).toBe(model.getFullModelRange().toString());
+        })
+      })
+      describe('Multi Line Change', function () {
+        describe('First Set Change',function(){
+          let model, defaultValue, changeText = 'ABC\nDE\nF';
+          beforeEach(function () {
+            defaultValue = [
+              'This line is not editable',
+              '123',
+              '456',
+              '789',
+              'This line is not editable',
+              'abc',
+              'def',
+              'ghi',
+              'This line is not editable',
+              '!@#%^&',
+            ].join('\n');
+            model = monaco.editor.createModel(defaultValue, 'javascript');
+            instanceOfRestrictor.addRestrictionsTo(model, [
               {
-                forceMoveMarkers: true,
-                range: currentRanges.valueInConsoleLog,
-                text: defaultValueForValueInConsoleLog
-              }
+                range: [2, 1, 4, 4],
+                allowMultiline: true,
+                label: 'test'
+              },
+              {
+                range: [6, 1, 8, 4],
+                allowMultiline: true,
+                label: 'alphabets'
+              },
+              {
+                range: [10, 1, 10, 7],
+                label: 'symbols'
+              },
             ]);
-            return result;
-          }).toBeTruthy();
+            editorInstance.setModel(model);
+          })
+          it('Start Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(2, 1, 3, 1),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 5,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[7,1 -> 9,4]");
+            expect(currentRanges.symbols.toString()).toBe("[11,1 -> 11,7]");
+          })
+          it('Mid Of Range - 1', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(2, 2, 3, 2),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 5,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[7,1 -> 9,4]");
+            expect(currentRanges.symbols.toString()).toBe("[11,1 -> 11,7]");
+          })
+          it('Mid Of Range - 2', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(2, 1, 2, 4),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 6,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[8,1 -> 10,4]");
+            expect(currentRanges.symbols.toString()).toBe("[12,1 -> 12,7]");
+          })
+          it('Mid Of Range - 3', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(2, 2, 4, 3),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,3]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 8,4]");
+            expect(currentRanges.symbols.toString()).toBe("[10,1 -> 10,7]");
+          })
+          it('End Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(2, 1, 2, 2),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 6,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[8,1 -> 10,4]");
+            expect(currentRanges.symbols.toString()).toBe("[12,1 -> 12,7]");
+          })
+        })
+        describe('Middle Set Change',function(){
+          let model, defaultValue, changeText = 'ABC\nDE\nF';
+          beforeEach(function () {
+            defaultValue = [
+              'This line is not editable',
+              '123',
+              '456',
+              '789',
+              'This line is not editable',
+              'abc',
+              'def',
+              'ghi',
+              'This line is not editable',
+              '!@#%^&',
+            ].join('\n');
+            model = monaco.editor.createModel(defaultValue, 'javascript');
+            instanceOfRestrictor.addRestrictionsTo(model, [
+              {
+                range: [2, 1, 4, 4],
+                allowMultiline: true,
+                label: 'test'
+              },
+              {
+                range: [6, 1, 8, 4],
+                allowMultiline: true,
+                label: 'alphabets'
+              },
+              {
+                range: [10, 1, 10, 7],
+                label: 'symbols'
+              },
+            ]);
+            editorInstance.setModel(model);
+          })
+          it('Start Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(6, 1, 7, 1),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 9,4]");
+            expect(currentRanges.symbols.toString()).toBe("[11,1 -> 11,7]");
+          })
+          it('Mid Of Range - 1', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(6, 2, 7, 2),
+              text: changeText
+            }])
+            
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 9,4]");
+            expect(currentRanges.symbols.toString()).toBe("[11,1 -> 11,7]");
+          })
+          it('Mid Of Range - 2', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(6, 1, 6, 4),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 10,4]");
+            expect(currentRanges.symbols.toString()).toBe("[12,1 -> 12,7]");
+          })
+          it('Mid Of Range - 3', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(6, 2, 8, 3),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 8,3]");
+            expect(currentRanges.symbols.toString()).toBe("[10,1 -> 10,7]");
+          })
+          it('End Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(8, 1, 8, 2),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 10,4]");
+            expect(currentRanges.symbols.toString()).toBe("[12,1 -> 12,7]");
+          })
+        })
+        describe('Last Set Change',function(){
+          let model, defaultValue, changeText = 'ABC\nDE\nF';
+          beforeEach(function () {
+            defaultValue = [
+              'This line is not editable',
+              '123',
+              '456',
+              '789',
+              'This line is not editable',
+              'abc',
+              'def',
+              'ghi',
+              'This line is not editable',
+              '!@#%^&',
+            ].join('\n');
+            model = monaco.editor.createModel(defaultValue, 'javascript');
+            instanceOfRestrictor.addRestrictionsTo(model, [
+              {
+                range: [2, 1, 4, 4],
+                allowMultiline: true,
+                label: 'test'
+              },
+              {
+                range: [6, 1, 8, 4],
+                allowMultiline: true,
+                label: 'alphabets'
+              },
+              {
+                range: [10, 1, 10, 7],
+                allowMultiline: true,
+                label: 'symbols'
+              },
+            ]);
+            editorInstance.setModel(model);
+          })
+          it('Start Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(10, 1, 10, 1),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 8,4]");
+            expect(currentRanges.symbols.toString()).toBe("[10,1 -> 12,8]");
+          })
+          it('Mid Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(10, 2, 10, 5),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 8,4]");
+            expect(currentRanges.symbols.toString()).toBe("[10,1 -> 12,4]");
+          })
+          it('End Of Range', function () {
+            domNode.dispatchEvent(new Event('keydown'))
+            model.applyEdits([{
+              forceMoveMarkers: true,
+              range: new monaco.Range(10, 7, 10, 7),
+              text: changeText
+            }])
+            const currentRanges = model._getCurrentRanges();
+            expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
+            expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 8,4]");
+            expect(currentRanges.symbols.toString()).toBe("[10,1 -> 12,2]");
+          })
         })
       })
     })

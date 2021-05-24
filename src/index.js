@@ -1,7 +1,7 @@
 import checkType from './utils/checkType.js';
 import { TYPE_MUST_BE } from "./utils/errorMessages.js";
 import restrictEditArea from "./utils/restrictEditArea.js";
-export default function restrictedEditor(_injectedConstructors) {
+export default function restrictedEditor (_injectedConstructors) {
   /**
    * Custom Type Declarations 
    */
@@ -95,6 +95,7 @@ export default function restrictedEditor(_injectedConstructors) {
     return isInstanceValid(editorInstance, function (instance) {
       const domNode = instance.getDomNode();
       manipulator._listener = listenerFn.bind(API, instance);
+      manipulator._editorInstance = editorInstance;
       domNode.addEventListener('keydown', manipulator._listener, true);
       return true;
     });
@@ -102,7 +103,7 @@ export default function restrictedEditor(_injectedConstructors) {
   const addRestrictions = function (model, ranges) {
     return isModelValid(model, function (model) {
       if (type.editableRanges(ranges)) {
-        const restrictedModel = restrictEditArea(model, ranges, _injectedConstructors.range);
+        const restrictedModel = restrictEditArea(model, ranges, _injectedConstructors.range,manipulator._editorInstance);
         _uriRestrictionMap[restrictedModel.uri.toString()] = restrictedModel;
         return restrictedModel;
       } else {
@@ -129,6 +130,14 @@ export default function restrictedEditor(_injectedConstructors) {
       }
     })
   }
+  const updateHighlight = function () {
+    const instance = manipulator._editorInstance;
+    const model = instance.getModel();
+    const restrictedModel = _uriRestrictionMap[model.uri.toString()];
+    if(restrictedModel){
+      restrictedModel.updateHighlight();
+    }
+  }
 
   /**
    * Initialization Code
@@ -139,6 +148,7 @@ export default function restrictedEditor(_injectedConstructors) {
      * ! These values should not be used
      */
     _listener: null,
+    _editorInstance : null,
     _uriRestrictionMap,
     _injectedConstructors
   };
@@ -150,7 +160,8 @@ export default function restrictedEditor(_injectedConstructors) {
     initializeIn: init,
     addRestrictionsTo: addRestrictions,
     removeRestrictionsIn: removeRestrictions,
-    destroyInstanceFrom: destroyInstance
+    destroyInstanceFrom: destroyInstance,
+    updateHighlight: updateHighlight
   }
   for (let key in methods) {
     /**
