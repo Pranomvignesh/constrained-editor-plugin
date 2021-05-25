@@ -97,7 +97,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 1, 1),
             text: changeText
@@ -108,7 +108,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 1, 2),
             text: changeText
@@ -119,7 +119,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 4, 1, 4),
             text: 'ABC'
@@ -147,7 +147,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 1, 1),
             text: changeText
@@ -158,7 +158,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 1', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 1, 2),
             text: changeText
@@ -169,7 +169,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 2', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 3, 1, 3),
             text: changeText
@@ -180,7 +180,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 4, 1, 4),
             text: changeText
@@ -210,7 +210,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 1, 1),
             text: changeText
@@ -221,7 +221,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 1', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 3, 1, 3),
             text: changeText
@@ -232,7 +232,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 2', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 2, 2, 2),
             text: changeText
@@ -243,7 +243,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 4, 2, 4),
             text: changeText
@@ -272,7 +272,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 1, 1),
             text: changeText
@@ -283,7 +283,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 1', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 1, 2),
             text: changeText
@@ -294,7 +294,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 2', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 3, 2, 3),
             text: changeText
@@ -305,7 +305,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 4, 2, 4),
             text: changeText
@@ -333,7 +333,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Start Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 1, 1, 4),
           text: changeText
@@ -344,7 +344,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Mid Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 2, 1, 5),
           text: changeText
@@ -355,7 +355,7 @@ describe('Restrict Edit Area', function () {
       })
       it('End Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 5, 1, 7),
           text: changeText
@@ -385,7 +385,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Start Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 1, 2, 1),
           text: changeText
@@ -396,7 +396,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Mid Of Range - 1', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 2, 2, 2),
           text: changeText
@@ -407,7 +407,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Mid Of Range - 2', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(2, 1, 2, 4),
           text: changeText
@@ -418,7 +418,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Mid Of Range - 3', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 2, 3, 3),
           text: changeText
@@ -429,7 +429,7 @@ describe('Restrict Edit Area', function () {
       })
       it('End Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(2, 1, 2, 2),
           text: changeText
@@ -456,7 +456,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Start Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 1, 1, 4),
           text: changeText
@@ -467,7 +467,7 @@ describe('Restrict Edit Area', function () {
       })
       it('Mid Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 2, 1, 5),
           text: changeText
@@ -478,7 +478,7 @@ describe('Restrict Edit Area', function () {
       })
       it('End Of Range', function () {
         domNode.dispatchEvent(new Event('keydown'))
-        model.applyEdits([{
+        model.applyEdits( [{
           forceMoveMarkers: true,
           range: new monaco.Range(1, 5, 1, 7),
           text: changeText
@@ -509,7 +509,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 2, 1),
             text: changeText
@@ -520,7 +520,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 1', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 2, 2),
             text: changeText
@@ -531,7 +531,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 2', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 1, 2, 4),
             text: changeText
@@ -542,7 +542,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 3', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 3, 3),
             text: changeText
@@ -553,7 +553,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 1, 2, 2),
             text: changeText
@@ -583,7 +583,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 2, 1),
             text: changeText
@@ -594,7 +594,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 1', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 2, 2),
             text: changeText
@@ -605,7 +605,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 2', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 1, 2, 4),
             text: changeText
@@ -616,7 +616,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 3', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 3, 3),
             text: changeText
@@ -627,7 +627,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 1, 2, 2),
             text: changeText
@@ -661,7 +661,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Start Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 1, 2, 1),
             text: changeText
@@ -672,7 +672,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 1', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 2, 2),
             text: changeText
@@ -683,7 +683,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 2', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 1, 2, 4),
             text: changeText
@@ -694,7 +694,7 @@ describe('Restrict Edit Area', function () {
         })
         it('Mid Of Range - 3', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(1, 2, 3, 3),
             text: changeText
@@ -705,7 +705,7 @@ describe('Restrict Edit Area', function () {
         })
         it('End Of Range', function () {
           domNode.dispatchEvent(new Event('keydown'))
-          model.applyEdits([{
+          model.applyEdits( [{
             forceMoveMarkers: true,
             range: new monaco.Range(2, 1, 2, 2),
             text: changeText
@@ -716,7 +716,7 @@ describe('Restrict Edit Area', function () {
         })
       })
       describe('Multi Line Change', function () {
-        describe('First Set Change',function(){
+        describe('First Set Change', function () {
           let model, defaultValue, changeText = 'ABC\nDE\nF';
           beforeEach(function () {
             defaultValue = [
@@ -752,7 +752,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Start Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(2, 1, 3, 1),
               text: changeText
@@ -764,7 +764,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range - 1', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(2, 2, 3, 2),
               text: changeText
@@ -776,7 +776,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range - 2', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(2, 1, 2, 4),
               text: changeText
@@ -788,7 +788,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range - 3', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(2, 2, 4, 3),
               text: changeText
@@ -800,7 +800,7 @@ describe('Restrict Edit Area', function () {
           })
           it('End Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(2, 1, 2, 2),
               text: changeText
@@ -811,7 +811,7 @@ describe('Restrict Edit Area', function () {
             expect(currentRanges.symbols.toString()).toBe("[12,1 -> 12,7]");
           })
         })
-        describe('Middle Set Change',function(){
+        describe('Middle Set Change', function () {
           let model, defaultValue, changeText = 'ABC\nDE\nF';
           beforeEach(function () {
             defaultValue = [
@@ -847,7 +847,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Start Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(6, 1, 7, 1),
               text: changeText
@@ -859,12 +859,12 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range - 1', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(6, 2, 7, 2),
               text: changeText
             }])
-            
+
             const currentRanges = model._getCurrentRanges();
             expect(currentRanges.test.toString()).toBe("[2,1 -> 4,4]");
             expect(currentRanges.alphabets.toString()).toBe("[6,1 -> 9,4]");
@@ -872,7 +872,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range - 2', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(6, 1, 6, 4),
               text: changeText
@@ -884,7 +884,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range - 3', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(6, 2, 8, 3),
               text: changeText
@@ -896,7 +896,7 @@ describe('Restrict Edit Area', function () {
           })
           it('End Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(8, 1, 8, 2),
               text: changeText
@@ -907,7 +907,7 @@ describe('Restrict Edit Area', function () {
             expect(currentRanges.symbols.toString()).toBe("[12,1 -> 12,7]");
           })
         })
-        describe('Last Set Change',function(){
+        describe('Last Set Change', function () {
           let model, defaultValue, changeText = 'ABC\nDE\nF';
           beforeEach(function () {
             defaultValue = [
@@ -944,7 +944,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Start Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(10, 1, 10, 1),
               text: changeText
@@ -956,7 +956,7 @@ describe('Restrict Edit Area', function () {
           })
           it('Mid Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(10, 2, 10, 5),
               text: changeText
@@ -968,7 +968,7 @@ describe('Restrict Edit Area', function () {
           })
           it('End Of Range', function () {
             domNode.dispatchEvent(new Event('keydown'))
-            model.applyEdits([{
+            model.applyEdits( [{
               forceMoveMarkers: true,
               range: new monaco.Range(10, 7, 10, 7),
               text: changeText

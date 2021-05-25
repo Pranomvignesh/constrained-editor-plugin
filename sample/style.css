@@ -8,8 +8,8 @@ body{
   border: 1px solid red;
 }
 .singleLineEditableArea {
-  background: rgb(146, 204, 146);
+  background: rgb(224, 175, 220);
 }
 .multiLineEditableArea {
-  background: rgb(228, 182, 140);
+  background: rgb(176, 234, 241);
 }
