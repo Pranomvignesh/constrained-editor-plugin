@@ -279,7 +279,7 @@ export default function restrictEditArea (model, ranges, rangeConstructor, insta
         doUndo();
       }
     }
-    model.updateHighlight();
+    // model._updateHighlight();
   });
   model._getCurrentRanges = function () {
     return restrictions.reduce(function (acc, restriction) {
@@ -298,30 +298,31 @@ export default function restrictEditArea (model, ranges, rangeConstructor, insta
     delete model.editInReadOnlyArea;
     delete model._isCursorAtCheckPoint;
     delete model._currentCursorPositions;
+    delete model._getCurrentRanges;
     model._restrictionChangeListener.dispose();
     delete model._restrictionChangeListener;
     delete model.disposeRestrictions;
     delete model.getValueInEditableRange;
     return model;
   }
-  model._oldDecorations = null;
-  model.updateHighlight = function () {
-    const newDecorations = restrictions.map(function (restriction) {
-      const range = restriction.range;
-      return {
-        range: restriction.range,
-        options: {
-          className: restriction.allowMultiline ? 'multiLineEditableArea' : 'singleLineEditableArea'
-        }
-      }
-    });
-    if (!model._oldDecorations) {
-      model._oldDecorations = []
-    }
-    instance.deltaDecorations(model._oldDecorations, newDecorations);
-    model._oldDecorations = newDecorations;
-  }
-  model.updateHighlight();
+  // model._oldDecorations = null;
+  // model._updateHighlight = function () {
+  //   const newDecorations = restrictions.map(function (restriction) {
+  //     const range = restriction.range;
+  //     return {
+  //       range: restriction.range,
+  //       options: {
+  //         className: restriction.allowMultiline ? 'multiLineEditableArea' : 'singleLineEditableArea'
+  //       }
+  //     }
+  //   });
+  //   if (!model._oldDecorations) {
+  //     model._oldDecorations = []
+  //   }
+  //   instance.deltaDecorations(model._oldDecorations, newDecorations);
+  //   model._oldDecorations = newDecorations;
+  // }
+  // model._updateHighlight();
   return model;
 }
 

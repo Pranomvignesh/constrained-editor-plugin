@@ -103,7 +103,7 @@ export default function restrictedEditor (_injectedConstructors) {
   const addRestrictions = function (model, ranges) {
     return isModelValid(model, function (model) {
       if (type.editableRanges(ranges)) {
-        const restrictedModel = restrictEditArea(model, ranges, _injectedConstructors.range,manipulator._editorInstance);
+        const restrictedModel = restrictEditArea(model, ranges, _injectedConstructors.range, manipulator._editorInstance);
         _uriRestrictionMap[restrictedModel.uri.toString()] = restrictedModel;
         return restrictedModel;
       } else {
@@ -116,6 +116,7 @@ export default function restrictedEditor (_injectedConstructors) {
       const domNode = instance.getDomNode();
       domNode.removeEventListener('keydown', manipulator._listener);
       delete manipulator._listener;
+      delete manipulator._editorInstance;
       return true;
     });
   }
@@ -124,9 +125,10 @@ export default function restrictedEditor (_injectedConstructors) {
       const uri = model.uri.toString();
       const restrictedModel = _uriRestrictionMap[uri];
       if (restrictedModel) {
-        restrictedModel.disposeRestrictions();
+        return restrictedModel.disposeRestrictions();
       } else {
         console.warn('Current Model is not a restricted Model');
+        return false;
       }
     })
   }
@@ -134,7 +136,7 @@ export default function restrictedEditor (_injectedConstructors) {
     const instance = manipulator._editorInstance;
     const model = instance.getModel();
     const restrictedModel = _uriRestrictionMap[model.uri.toString()];
-    if(restrictedModel){
+    if (restrictedModel) {
       restrictedModel.updateHighlight();
     }
   }
@@ -148,7 +150,7 @@ export default function restrictedEditor (_injectedConstructors) {
      * ! These values should not be used
      */
     _listener: null,
-    _editorInstance : null,
+    _editorInstance: null,
     _uriRestrictionMap,
     _injectedConstructors
   };
