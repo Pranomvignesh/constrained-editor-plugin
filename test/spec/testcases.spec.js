@@ -1,3 +1,4 @@
+//! Tests should not be run in random order.
 describe('Restrict Edit Area', function () {
   var editorInstance, model, instanceOfRestrictor, monacoInstance, domNode;
   beforeAll(function (done) {
