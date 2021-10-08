@@ -8,12 +8,12 @@ module.exports = [{
   target: 'web',
   devtool: "source-map",
   entry: {
-    'restrictor': path.join(__dirname, SRC_PATH, 'index.js'),
+    'constrainedEditorPlugin': path.join(__dirname, SRC_PATH, 'index.js'),
   },
   output: {
     filename: process.env.MODE === 'production' ? '[name].min.js' : '[name].js',
     library: {
-      name : 'restrictor',
+      name : 'constrainedEditor',
       type : 'window',
       export : 'default'
     },

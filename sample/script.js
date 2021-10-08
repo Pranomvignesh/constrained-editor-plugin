@@ -1,4 +1,4 @@
-require.config({ paths: { vs: '../node_modules/monaco-editor/min/vs' } });
+require.config({ paths: { vs: '../node_modules/monaco-editor/dev/vs' } });
 
 require(['vs/editor/editor.main'], function () {
   const editorInstance = monaco.editor.create(document.getElementById('container'), {
@@ -8,31 +8,12 @@ require(['vs/editor/editor.main'], function () {
     language: 'javascript'
   });
   const model = editorInstance.getModel();
-  const constructorsToInject = {
-    range: monaco.Range
-  }
   /**
    * Configuration for the Restricted Editor : Starts Here
    */
-  const instanceOfRestrictor = restrictor(constructorsToInject);
-  instanceOfRestrictor.initializeIn(editorInstance);
-  // instanceOfRestrictor.addRestrictionsTo(model, [
-  //   /**
-  //    * range : [ startLine, startColumn, endLine, endColumn ]
-  //   */
-  //   {
-  //     range: [2, 16, 2, 28], // Range of Hello world! String
-  //     label: 'valueInConsoleLog'
-  //   }, {
-  //     range: [1, 18, 1, 18], // Range of Arguments for Sample Function
-  //     label: 'argsOfSampleFn'
-  //   }, {
-  //     range: [3, 1, 3, 25], // Range of // Type something here
-  //     label: 'contentOfSampleFn',
-  //     allowMultiline: true
-  //   }
-  // ]);
-  instanceOfRestrictor.addRestrictionsTo(model, [
+  const instanceOfConstrainedEditor = constrainedEditor(monaco);
+  instanceOfConstrainedEditor.initializeIn(editorInstance);
+  instanceOfConstrainedEditor.addRestrictionsTo(model, [
     /**
      * range : [ startLine, startColumn, endLine, endColumn ]
     */
@@ -53,8 +34,8 @@ require(['vs/editor/editor.main'], function () {
      * done by the restricted editor are finished
      */
     setTimeout(function () {
-      const values = model.getValueInEditableRange()
-      // console.table(values);
+      const values = model.getValueInEditableRanges()
+      console.table(values);
     }, 0);
   })
 

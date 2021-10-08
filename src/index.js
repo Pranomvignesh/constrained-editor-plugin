@@ -1,82 +1,17 @@
-import checkType from './utils/checkType.js';
-import { TYPE_MUST_BE } from "./utils/errorMessages.js";
-import restrictEditArea from "./utils/restrictEditArea.js";
-export default function restrictedEditor (_injectedConstructors) {
-  /**
-   * Custom Type Declarations 
-   */
-  const type = checkType();
-  type.$extend.number('positiveNumber', {
-    positive: true
-  })
-  type.$extend.array('rangeArray', {
-    size: 4,
-    every: type.positiveNumber
-  })
-  type.$extend.object('editableRange', {
-    required: {
-      range: type.rangeArray
-    },
-    allowable: {
-      allowMultiline: type.boolean
-    }
-  })
-  type.$extend.array('editableRanges', {
-    every: type.editableRange
-  })
-  type.$extend.object('requiredConstructors', {
-    required: {
-      range: type.function
-    }
-  })
+import validators from './utils/validators.js';
+import { TypeMustBe } from './utils/definedErrors.js';
+import constrainModel from './constrainModel.js';
 
+export default function constrainedEditor(monaco) {
   /**
-   * Validation For Constructors
+   * Injected Dependencies
    */
-  if (!type.requiredConstructors(_injectedConstructors)) {
-    throw new Error(`
-    monaco.range is required for creating a instance of restrictedEditor.
-    Please pass the constructor of monaco.range
-    (eg:)
-      restrictedEditor({ range : monaco.range });
-    `);
+  if (monaco === undefined) {
+    throw new Error([
+      "Please pass the monaco global variable into function as",
+      "(eg:)constrainedEditor({ range : monaco.range });",
+    ].join('\n'));
   }
-
-  /**
-   * API Validator Functions
-   */
-  const isModelValid = function (model, callback) {
-    if (!type.object(model)) {
-      throw new Error(
-        TYPE_MUST_BE(
-          'ITextModel',
-          'model',
-          'The type interface can be found in monaco-editor api documentation'
-        )
-      );
-    }
-    return callback(model);
-  }
-  const isInstanceValid = function (instance, callback) {
-    if (
-      !type.object(instance) ||
-      !type.function(instance.getDomNode)
-    ) {
-      throw new Error(
-        TYPE_MUST_BE(
-          'ICodeEditor',
-          'editorInstance',
-          'The type interface can be found in monaco-editor api documentation'
-        )
-      );
-    }
-    return callback(instance);
-  }
-
-  /**
-   * List of Handlers for the API 
-   */
-  const _uriRestrictionMap = {};
   const listenerFn = function (instance) {
     const model = instance.getModel();
     if (model._isCursorAtCheckPoint) {
@@ -91,37 +26,52 @@ export default function restrictedEditor (_injectedConstructors) {
       model._currentCursorPositions = selections;
     }
   }
-  const init = function (editorInstance) {
-    return isInstanceValid(editorInstance, function (instance) {
-      const domNode = instance.getDomNode();
-      manipulator._listener = listenerFn.bind(API, instance);
+  const _uriRestrictionMap = {};
+  const { isInstanceValid, isModelValid, isRangesValid } = validators.initWith(monaco);
+  const initInEditorInstance = function (editorInstance) {
+    if (isInstanceValid(editorInstance)) {
+      const domNode = editorInstance.getDomNode();
+      manipulator._listener = listenerFn.bind(API, editorInstance);
       manipulator._editorInstance = editorInstance;
       domNode.addEventListener('keydown', manipulator._listener, true);
       return true;
-    });
+    } else {
+      throw new Error(
+        TypeMustBe(
+          'ICodeEditor',
+          'editorInstance',
+          'This type interface can be found in monaco editor documentation'
+        )
+      )
+    }
   }
-  const addRestrictions = function (model, ranges) {
-    return isModelValid(model, function (model) {
-      if (type.editableRanges(ranges)) {
-        const restrictedModel = restrictEditArea(model, ranges, _injectedConstructors.range, manipulator._editorInstance);
-        _uriRestrictionMap[restrictedModel.uri.toString()] = restrictedModel;
-        return restrictedModel;
+  const addRestrictionsTo = function (model, ranges) {
+    if (isModelValid(model)) {
+      if (isRangesValid(ranges)) {
+        const constrainedModel = constrainModel(model, ranges, monaco, manipulator._editorInstance);
+        _uriRestrictionMap[constrainedModel.uri.toString()] = constrainedModel;
+        return constrainedModel;
       } else {
-        throw new Error('Ranges Object is Invalid. Please Refer the documentation');
+        throw new Error(
+          TypeMustBe(
+            'Array<RangeRestrictionObject>',
+            'ranges',
+            'Please refer constrained editor documentation for proper structure'
+          )
+        )
       }
-    })
+    } else {
+      throw new Error(
+        TypeMustBe(
+          'ICodeEditor',
+          'editorInstance',
+          'This type interface can be found in monaco editor documentation'
+        )
+      )
+    }
   }
-  const destroyInstance = function (editorInstance) {
-    return isInstanceValid(editorInstance, function (instance) {
-      const domNode = instance.getDomNode();
-      domNode.removeEventListener('keydown', manipulator._listener);
-      delete manipulator._listener;
-      delete manipulator._editorInstance;
-      return true;
-    });
-  }
-  const removeRestrictions = function (model) {
-    return isModelValid(model, function (model) {
+  const removeRestrictionsIn = function (model) {
+    if (isModelValid(model)) {
       const uri = model.uri.toString();
       const restrictedModel = _uriRestrictionMap[uri];
       if (restrictedModel) {
@@ -130,51 +80,62 @@ export default function restrictedEditor (_injectedConstructors) {
         console.warn('Current Model is not a restricted Model');
         return false;
       }
-    })
+    } else {
+      throw new Error(
+        TypeMustBe(
+          'ICodeEditor',
+          'editorInstance',
+          'This type interface can be found in monaco editor documentation'
+        )
+      )
+    }
   }
-  const updateHighlight = function () {
-    const instance = manipulator._editorInstance;
-    const model = instance.getModel();
-    const restrictedModel = _uriRestrictionMap[model.uri.toString()];
-    if (restrictedModel) {
-      restrictedModel.updateHighlight();
+  const disposeConstrainer = function () {
+    if (manipulator._editorInstance) {
+      const instance = manipulator._editorInstance;
+      const domNode = instance.getDomNode();
+      domNode.removeEventListener('keydown', manipulator._listener);
+      delete manipulator._listener;
+      delete manipulator._editorInstance;
+      for (let key in _uriRestrictionMap) {
+        delete _uriRestrictionMap[key];
+      }
+      return true;
     }
   }
 
   /**
-   * Initialization Code
+   * Main Function starts here
    */
+  // @internal
   const manipulator = {
     /**
-     * Internal variables
-     * ! These values should not be used
+     * These variables should not be modified by external code
+     * This has to be used for debugging and testing 
      */
     _listener: null,
     _editorInstance: null,
-    _uriRestrictionMap,
-    _injectedConstructors
-  };
-  const API = Object.create(manipulator);
-  const methods = {
-    /**
-     * List of Exposed APIs
-     */
-    initializeIn: init,
-    addRestrictionsTo: addRestrictions,
-    removeRestrictionsIn: removeRestrictions,
-    destroyInstanceFrom: destroyInstance,
-    updateHighlight: updateHighlight
+    _uriRestrictionMap: _uriRestrictionMap,
+    _injectedResources: monaco
   }
-  for (let key in methods) {
+  const API = Object.create(manipulator);
+  const exposedMethods = {
     /**
-     * Preventing the manipulation of the API
+     * These functions are exposed to the user
+     * These functions should be protected from editing
      */
-    Object.defineProperty(API, key, {
-      value: methods[key],
+    initializeIn: initInEditorInstance,
+    addRestrictionsTo: addRestrictionsTo,
+    removeRestrictionsIn: removeRestrictionsIn,
+    disposeConstrainer: disposeConstrainer
+  }
+  for (let methodName in exposedMethods) {
+    Object.defineProperty(API, methodName, {
+      enumerable: false,
       writable: false,
       configurable: false,
-      enumerable: false
+      value: exposedMethods[methodName]
     })
   }
   return Object.freeze(API);
-};
+}
