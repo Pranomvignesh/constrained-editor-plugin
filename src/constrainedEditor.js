@@ -33,6 +33,7 @@ export default function constrainedEditor(monaco) {
       const domNode = editorInstance.getDomNode();
       manipulator._listener = listenerFn.bind(API, editorInstance);
       manipulator._editorInstance = editorInstance;
+      manipulator._editorInstance._isInDevMode = false;
       domNode.addEventListener('keydown', manipulator._listener, true);
       return true;
     } else {
@@ -96,11 +97,41 @@ export default function constrainedEditor(monaco) {
       const domNode = instance.getDomNode();
       domNode.removeEventListener('keydown', manipulator._listener);
       delete manipulator._listener;
+      delete manipulator._editorInstance._isInDevMode;
+      delete manipulator._editorInstance._devModeAction;
       delete manipulator._editorInstance;
       for (let key in _uriRestrictionMap) {
         delete _uriRestrictionMap[key];
       }
       return true;
+    }
+  }
+  const toggleDevMode = function () {
+    if (manipulator._editorInstance._isInDevMode) {
+      manipulator._editorInstance._isInDevMode = false;
+      manipulator._editorInstance._devModeAction.dispose();
+      delete manipulator._editorInstance._devModeAction;
+    } else {
+      manipulator._editorInstance._isInDevMode = true;
+      manipulator._editorInstance._devModeAction = manipulator._editorInstance.addAction({
+        id: 'showRange',
+        label: 'Show Range in console',
+        contextMenuGroupId: 'navigation',
+        contextMenuOrder: 1.5,
+        run: function (editor) {
+          const selections = editor.getSelections();
+          const ranges = selections.reduce(function (acc, { startLineNumber, endLineNumber, startColumn, endColumn }) {
+            acc.push('range : ' + JSON.stringify([
+              startLineNumber,
+              startColumn,
+              endLineNumber,
+              endColumn
+            ]));
+            return acc;
+          }, []).join('\n');
+          console.log(`Selected Ranges : \n` + JSON.stringify(ranges, null, 2));
+        }
+      });
     }
   }
 
@@ -127,7 +158,8 @@ export default function constrainedEditor(monaco) {
     initializeIn: initInEditorInstance,
     addRestrictionsTo: addRestrictionsTo,
     removeRestrictionsIn: removeRestrictionsIn,
-    disposeConstrainer: disposeConstrainer
+    disposeConstrainer: disposeConstrainer,
+    toggleDevMode: toggleDevMode
   }
   for (let methodName in exposedMethods) {
     Object.defineProperty(API, methodName, {

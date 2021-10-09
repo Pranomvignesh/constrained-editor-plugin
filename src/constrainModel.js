@@ -1,4 +1,5 @@
 import deepClone from './utils/deepClone.js';
+import enums from './utils/enums.js';
 const constrainModel = function (model, ranges, monaco) {
   const rangeConstructor = monaco.Range;
   const sortRangesInAscendingOrder = function (rangeObject1, rangeObject2) {
@@ -118,16 +119,20 @@ const constrainModel = function (model, ranges, monaco) {
   }
   const disposeRestrictions = function () {
     model._restrictionChangeListener.dispose();
+    window.removeEventListener("error", handleUnhandledPromiseRejection);
     delete model.editInRestrictedArea;
     delete model.disposeRestrictions;
     delete model.getValueInEditableRanges;
     delete model.updateRestrictions;
     delete model.getCurrentEditableRanges;
+    delete model.toggleHighlightOfEditableAreas;
+    delete model._hasHighlight;
     delete model._isRestrictedModel;
     delete model._isCursorAtCheckPoint;
     delete model._currentCursorPositions;
     delete model._editableRangeChangeListener;
     delete model._restrictionChangeListener;
+    delete model._oldDecorations;
     return model;
   }
   const isCursorAtCheckPoint = function (positions) {
@@ -146,18 +151,18 @@ const constrainModel = function (model, ranges, monaco) {
         }
       }
     });
-  }
+  };
   const addEditableRangeListener = function (callback) {
     if (type.function(callback)) {
       model._editableRangeChangeListener.push(callback);
     }
-  }
+  };
   const triggerChangeListenersWith = function (currentChanges, allChanges) {
     const currentRanges = getCurrentEditableRanges();
     model._editableRangeChangeListener.forEach(function (callback) {
       callback.call(model, currentChanges, allChanges, currentRanges);
     });
-  }
+  };
   const doUndo = function () {
     return Promise.resolve().then(function () {
       model.editInRestrictedArea = true;
@@ -168,6 +173,7 @@ const constrainModel = function (model, ranges, monaco) {
   const updateRange = function (restriction, range, finalLine, finalColumn, changes, changeIndex) {
     let oldRangeEndLineNumber = range.endLineNumber;
     let oldRangeEndColumn = range.endColumn;
+    restriction.prevRange = range;
     restriction.range = range.setEndPosition(finalLine, finalColumn);
     const length = restrictions.length;
     let changesLength = changes.length;
@@ -293,6 +299,39 @@ const constrainModel = function (model, ranges, monaco) {
   const updateRestrictions = function (ranges) {
     restrictions = deepClone(ranges).sort(sortRangesInAscendingOrder);
     prepareRestrictions(restrictions);
+  };
+  const toggleHighlightOfEditableAreas = function () {
+    if (!model._hasHighlight) {
+      const decorations = restrictions.map(function (restriction) {
+        const decoration = {
+          range: restriction.range,
+          options: {
+            className: restriction.allowMultiline ?
+              enums.MULTI_LINE_HIGHLIGHT_CLASS :
+              enums.SINGLE_LINE_HIGHLIGHT_CLASS
+          }
+        }
+        if (restriction.label) {
+          decoration.hoverMessage = restriction.label;
+        }
+        return decoration;
+      });
+      model._oldDecorations = model.deltaDecorations([], decorations);
+      model._hasHighlight = true;
+    } else {
+      model.deltaDecorations(model._oldDecorations, []);
+      delete model._oldDecorations;
+      model._hasHighlight = false;
+    }
+  }
+  const handleUnhandledPromiseRejection = function () {
+    console.debug('handler for unhandled promise rejection');
+  };
+  const setAllRangesToPrev = function (rangeMap) {
+    for (let key in rangeMap) {
+      const restriction = rangeMap[key];
+      restriction.range = restriction.prevRange;
+    }
   }
 
   const manipulatorApi = {
@@ -300,10 +339,11 @@ const constrainModel = function (model, ranges, monaco) {
     _isRestrictedValueValid: true,
     _editableRangeChangeListener: [],
     _isCursorAtCheckPoint: isCursorAtCheckPoint,
-    _currentCursorPositions : []
+    _currentCursorPositions: []
   }
 
   prepareRestrictions(restrictions);
+  model._hasHighlight = false;
   manipulatorApi._restrictionChangeListener = model.onDidChangeContentFast(function (contentChangedEvent) {
     const isUndoing = contentChangedEvent.isUndoing;
     model._isRestrictedValueValid = true;
@@ -359,6 +399,7 @@ const constrainModel = function (model, ranges, monaco) {
           }
 
           const info = getInfoFrom(change, editableRange);
+          restriction.lastInfo = info;
           if (info.isAddition || info.isReplacement) {
             if (info.rangeIsSingleLine) {
               /**
@@ -411,7 +452,13 @@ const constrainModel = function (model, ranges, monaco) {
           const restriction = rangeMap[key];
           const range = restriction.range;
           const rangeString = restriction.label || range.toString();
-          currentlyEditedRanges[rangeString] = values[rangeString];
+          const value = values[rangeString];
+          if (restriction.validate && !restriction.validate(value, range, restriction.lastInfo)) {
+            setAllRangesToPrev(rangeMap);
+            doUndo();
+            return; // Breaks the loop and prevents the triggerChangeListener
+          }
+          currentlyEditedRanges[rangeString] = value;
         }
         triggerChangeListenersWith(currentlyEditedRanges, values);
       } else {
@@ -421,13 +468,15 @@ const constrainModel = function (model, ranges, monaco) {
       model._isRestrictedValueValid = false;
     }
   });
+  window.onerror = handleUnhandledPromiseRejection;
   const exposedApi = {
     editInRestrictedArea: false,
     getCurrentEditableRanges: getCurrentEditableRanges,
     getValueInEditableRanges: getValueInEditableRanges,
     disposeRestrictions: disposeRestrictions,
     onDidChangeContentInEditableRange: addEditableRangeListener,
-    updateRestrictions: updateRestrictions
+    updateRestrictions: updateRestrictions,
+    toggleHighlightOfEditableAreas: toggleHighlightOfEditableAreas
   }
   for (let funcName in manipulatorApi) {
     Object.defineProperty(model, funcName, {

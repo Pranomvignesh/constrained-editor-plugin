@@ -1,9 +1,13 @@
 require.config({ paths: { vs: '../node_modules/monaco-editor/dev/vs' } });
-
 require(['vs/editor/editor.main'], function () {
-  const editorInstance = monaco.editor.create(document.getElementById('container'), {
+  const container = document.getElementById('container')
+  const editorInstance = monaco.editor.create(container, {
     value: [
-      '123'
+      'const utils = {};',
+      'function addKeysToUtils(){',
+      '',
+      '}',
+      'addKeysToUtils();'
     ].join('\n'),
     language: 'javascript'
   });
@@ -18,9 +22,18 @@ require(['vs/editor/editor.main'], function () {
      * range : [ startLine, startColumn, endLine, endColumn ]
     */
     {
-      range: [1, 1, 1, 4], // Range of Hello world! String
+      range: [1, 7, 1, 12], // Range of Util Variable name
+      label: 'utilName',
+      validate: function (currentlyTypedValue, newRange, info) {
+        // console.log({ currentlyTypedValue });
+        const noSpaceAndSpecialChars = /^[a-z0-9A-Z]*$/;
+        return noSpaceAndSpecialChars.test(currentlyTypedValue);
+      }
+    },
+    {
+      range: [3, 1, 3, 1], // Range of Function definition
       allowMultiline: true,
-      label: 'nums'
+      label: 'funcDefinition'
     }
   ]);
   /**
@@ -35,8 +48,12 @@ require(['vs/editor/editor.main'], function () {
      */
     setTimeout(function () {
       const values = model.getValueInEditableRanges()
-      console.table(values);
+      // console.table(values);
     }, 0);
   })
 
+  // Demo Purpose
+  container.addEventListener('keydown', function (event) {
+    console.log('Pressed Key: ', event.key);
+  });
 });
