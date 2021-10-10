@@ -153,7 +153,7 @@ const constrainModel = function (model, ranges, monaco) {
     });
   };
   const addEditableRangeListener = function (callback) {
-    if (type.function(callback)) {
+    if (typeof callback === 'function') {
       model._editableRangeChangeListener.push(callback);
     }
   };

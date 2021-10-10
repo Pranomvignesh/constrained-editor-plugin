@@ -33,3 +33,16 @@
   flex: 0 0 auto;
   width: 350px;
 }
+
+.highlightAreas {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.currentValues {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

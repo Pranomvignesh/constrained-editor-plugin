@@ -140,3 +140,10 @@ html[data-theme="dark"] {
     border-color                 : var(--ifm-color-primary);
   }
 }
+.editableArea--single-line {
+  background: #dde969;
+}
+
+.editableArea--multi-line {
+  background: #ffb74e;
+}

@@ -1,35 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import styles from './PlaygroundComponent.module.css';
 import * as monaco from 'monaco-editor';
-import * as constrainedEditorPlugin from 'constrained-editor-plugin';
+import constrainedEditor from 'constrained-editor-plugin';
 
 export default class PlaygroundComponent extends React.Component {
   constructor(props) {
     super(props);
     this.monacoContainer = React.createRef();
+    this.values = {};
   }
   componentWillMount() {
+    const baseDir = '/node_modules/monaco-editor/esm/vs/';
     window.MonacoEnvironment = {
       getWorkerUrl: function (_moduleId, label) {
         if (label === 'json') {
-          return './json.worker.bundle.js';
+          return baseDir + 'language/json/json.worker.js';
         }
         if (label === 'css' || label === 'scss' || label === 'less') {
-          return './css.worker.bundle.js';
+          return baseDir + 'language/css/css.worker.js';
         }
         if (label === 'html' || label === 'handlebars' || label === 'razor') {
-          return './html.worker.bundle.js';
+          return baseDir + 'language/html/html.worker.js';
         }
         if (label === 'typescript' || label === 'javascript') {
-          return './ts.worker.bundle.js';
+          return baseDir + 'language/typescript/ts.worker.js';
         }
-        return './editor.worker.bundle.js';
+        return baseDir + 'editor/editor.worker.js';
       }
     };
   }
   componentDidMount() {
-    const editorInstance = monaco.editor.create(this.monacoContainer.current, {
+    this.editorInstance = monaco.editor.create(this.monacoContainer.current, {
       value: [
         'const utils = {};',
         'function addKeysToUtils(){',
@@ -39,8 +41,34 @@ export default class PlaygroundComponent extends React.Component {
       ].join('\n'),
       language: 'javascript'
     });
-    console.log(constrainedEditorPlugin);
+    const constrainedInstance = constrainedEditor(monaco);
+    constrainedInstance.initializeIn(this.editorInstance);
+    this.model = this.editorInstance.getModel();
+    this.model = constrainedInstance.addRestrictionsTo(this.model, [
+      {
+        range: [1, 7, 1, 12], // Range of Util Variable name
+        label: 'utilName',
+        validate: function (currentlyTypedValue, newRange, info) {
+          // console.log({ currentlyTypedValue });
+          const noSpaceAndSpecialChars = /^[a-z0-9A-Z]*$/;
+          return noSpaceAndSpecialChars.test(currentlyTypedValue);
+        }
+      },
+      {
+        range: [3, 1, 3, 1], // Range of Function definition
+        allowMultiline: true,
+        label: 'funcDefinition'
+      }
+    ]);
+    this.model.onDidChangeContentInEditableRange(function () {
+      debugger
+    })
   }
+
+  showEditableArea() {
+    this.model.toggleHighlightOfEditableAreas();
+  }
+
   render() {
     return (
       <section className={styles.section}>
@@ -50,8 +78,21 @@ export default class PlaygroundComponent extends React.Component {
           </div>
           <div className={styles.switches}>
             <h2>Toolkit</h2>
-            <p>Toggle Highlight</p>
-            <p>Current Values</p>
+            <div className={styles.highlightAreas}>
+              <label>Highlight Editable Areas</label>
+              <input type="checkbox" onClick={() => this.showEditableArea.call(this)} />
+            </div>
+            <div>
+              <label>Current Values</label>
+              <div className={styles.currentValues}>
+                {/* {Object.keys(this.values).map(label => (
+                  <div>
+                    <div>{label}</div>
+                    <div>{this.values[label]}</div>
+                  </div>
+                ))} */}
+              </div>
+            </div>
           </div>
         </div>
       </section>
