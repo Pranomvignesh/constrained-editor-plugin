@@ -1,0 +1,142 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary         : #827cdb;
+  --ifm-color-primary-dark    : #625add;
+  --ifm-color-primary-darker  : #060607;
+  --ifm-color-primary-darkest : #141239;
+  --ifm-color-primary-light   : #928bef;
+  --ifm-color-primary-lighter : #d3d0f9;
+  --ifm-color-primary-lightest: #f9f8ff;
+  --ifm-code-font-size        : 95%;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display         : block;
+  margin          : 0 calc(-1 * var(--ifm-pre-padding));
+  padding         : 0 var(--ifm-pre-padding);
+}
+
+.hero {
+  &.hero--primary {
+    background-color: var(--ifm-color-primary-dark);
+
+    .button--primary {
+      color: var(--ifm-color-primary-lightest);
+    }
+  }
+
+  &__title {
+    color: var(--ifm-color-primary-lightest);
+  }
+
+  &__subtitle {
+    color: var(--ifm-color-primary-lightest);
+  }
+
+  &__command {
+    margin-bottom: 10px;
+
+    code {
+      display    : inline-flex;
+      background : transparent;
+      padding    : 10px 15px;
+      color      : var(--ifm-color-primary-lightest);
+      border     : 1px solid var(--ifm-color-primary-lightest);
+      gap        : 10px;
+      align-items: center;
+
+      span:last-child {
+        cursor       : pointer;
+        padding      : 5px;
+        background   : var(--ifm-color-primary-light);
+        border-radius: 5px;
+      }
+    }
+  }
+
+
+}
+
+html[dark-theme="dark"] {
+  --ifm-navbar-background-color: var(--ifm-color-primary-darkest);
+
+  .docusaurus-highlight-code-line {
+    background-color: #141239;
+  }
+
+  .hero {
+    &.hero--primary {
+      color           : var(--ifm-color-primary-lightest);
+      background-color: var(--ifm-color-primary-dark);
+
+      .button--primary {
+        color: var(--ifm-color-primary-lightest);
+      }
+    }
+  }
+
+  .command {
+    code {
+      color     : var(--ifm-color-primary-lightest);
+      background: transparent;
+      border    : 1px solid var(--ifm-color-primary-lightest);
+
+      span {
+        background: var(--ifm-color-primary-light);
+      }
+    }
+  }
+
+  .buttons_src-pages-index-module .button--primary {
+    color: var(--ifm-color-primary-lightest);
+  }
+}
+
+.navbar,
+.menu {
+  &__link {
+    &:hover {
+      color: #9863f5;
+    }
+
+    &--active {
+      color: var(--ifm-color-primary-dark);
+    }
+  }
+}
+
+html[data-theme="dark"] {
+
+  .navbar,
+  .menu {
+    &__link {
+      &:hover {
+        color: #9863f5;
+      }
+
+      &--active {
+        color: var(--ifm-color-primary-light);
+      }
+    }
+  }
+}
+
+.button--primary:not(.button--outline) {
+  --ifm-button-background-color: var(--ifm-color-primary-dark);
+  --ifm-button-border-color    : var(--ifm-color-primary-dark);
+
+  &:hover,
+  &:active {
+    --ifm-button-background-color: var(--ifm-color-primary);
+    --ifm-button-border-color    : var(--ifm-color-primary);
+    background-color             : var(--ifm-color-primary);
+    border-color                 : var(--ifm-color-primary);
+  }
+}

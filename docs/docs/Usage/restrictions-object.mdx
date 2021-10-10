@@ -1,0 +1,60 @@
+---
+sidebar_position: 2
+---
+
+# Restrictions Object
+
+Restrictions Object is used to control the editable area in the editor.
+
+## Structure of Restrictions object
+
+List of all the valid keys which can be given in the Restrictions object.
+
+### Range
+
+- **Required Field** : This has to be an Array(4), with all the entries being a **positive whole number**.
+
+This field will be used to construct the editable range of the editor.
+
+```javascript
+const restrictions = {
+  range: [1, 7, 1, 13]
+};
+```
+
+### AllowMultiline
+
+This is an **Optional** Field. This should be of type **Boolean**. 
+
+This field will be used to flag the plugin whether to allow new line `\n` character (or) not.
+
+### Label
+
+This is an **Optional** Field. This should be of type **String**.
+
+:::danger
+
+Treat this label as an unique ID, and **don't declare two restrictions with same label.**
+
+:::
+
+### Validate
+
+This is an **Optional** Field. This should be of type **Function**.
+
+This callback can be used to validate the value entered in the editable area. 
+If **returned false**, then that content will not be added to the editable area.
+
+:::tip
+
+**Returning undefined** will not be considered as a falsy value here.
+Only **false** can prevent the content addition, all other values will be considered as truthy.
+
+:::
+
+:::danger
+
+There is no debounce happening in calling the validate function. 
+If you feel, **please implement the debounce inside the validate function**
+
+:::
