@@ -1,6 +1,6 @@
 {
   "name": "constrained-editor-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only",
   "main": "./src/constrainedEditor.js",
   "directories": {
@@ -15,6 +15,7 @@
     "amend": "git commit . --amend -m \"$(git log -1 --pretty=%B)\"",
     "serveSamples": "./node_modules/.bin/live-server --entry-file=./sample/index.html --port=5050",
     "dev": "MODE=development webpack --watch --mode=development -c './src/webpack.config.js'",
+    "prepack": "npm run bundle",
     "bundle": "MODE=production webpack --mode=production -c './src/webpack.config.js' && MODE=development webpack --mode=development -c './src/webpack.config.js'",
     "build": "MODE=production webpack --mode=production -c './src/webpack.config.js'"
   },
@@ -45,6 +46,7 @@
     "jasmine": "3.7.0",
     "live-server": "1.2.1",
     "monaco-editor": "0.24.0",
+    "standard-version": "^9.3.1",
     "webpack": "5.37.1",
     "webpack-cli": "4.7.0"
   }
