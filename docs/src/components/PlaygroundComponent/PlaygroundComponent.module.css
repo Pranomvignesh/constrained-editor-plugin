@@ -1,0 +1,35 @@
+.section {
+  display: flex;
+  align-items: flex-start;
+  padding: 2rem 25px;
+  width: 100%;
+  flex-direction: column;
+  height: calc(100vh - 300px);
+}
+
+.section h1 {
+  padding-left: 25px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0px 20px;
+  gap: 20px;
+  height: 100%;
+}
+
+.editor {
+  flex: 1 1 100%;
+  border: 1px solid #8f8f8f;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.switches {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: 350px;
+}

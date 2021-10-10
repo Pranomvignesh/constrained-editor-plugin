@@ -4,11 +4,10 @@ import Layout from '@theme/Layout';
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
-import AboutComponent from '../components/AboutComponent';
+import AboutComponent from '../components/AboutComponent/AboutComponent.js';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
-  
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
@@ -17,8 +16,8 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            See Demo
+            to="/playground">
+            See Playground
           </Link>
           <Link
             className="button button--primary button--lg"

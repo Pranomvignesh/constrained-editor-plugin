@@ -2,11 +2,7 @@
 sidebar_position: 1
 ---
 
-# Documentation
-
-Let's discover **APIs available in the Constrained Editor Plugin**.
-
-## Getting Started
+# Getting Started
 
 Get started by **installing the constrained-editor-plugin via npm**. Link is available [here](https://www.npmjs.com/package/constrained-editor-plugin).
 

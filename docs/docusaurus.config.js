@@ -24,7 +24,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/Pranomvignesh/constrained-editor-plugin/docs/',
+          editUrl: 'https://github.com/Pranomvignesh/constrained-editor-plugin/blob/master/docs',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
@@ -48,6 +48,11 @@ const config = {
             docId: 'intro',
             position: 'left',
             label: 'API Documentation',
+          },
+          {
+            href: '/playground',
+            position: 'left',
+            label: 'Playground',
           },
           {
             href: 'https://github.com/Pranomvignesh/constrained-editor-plugin',

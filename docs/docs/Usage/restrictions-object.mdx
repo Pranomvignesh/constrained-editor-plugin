@@ -18,13 +18,13 @@ This field will be used to construct the editable range of the editor.
 
 ```javascript
 const restrictions = {
-  range: [1, 7, 1, 13]
+  range: [1, 7, 1, 13],
 };
 ```
 
 ### AllowMultiline
 
-This is an **Optional** Field. This should be of type **Boolean**. 
+This is an **Optional** Field. This should be of type **Boolean**.
 
 This field will be used to flag the plugin whether to allow new line `\n` character (or) not.
 
@@ -42,8 +42,13 @@ Treat this label as an unique ID, and **don't declare two restrictions with same
 
 This is an **Optional** Field. This should be of type **Function**.
 
-This callback can be used to validate the value entered in the editable area. 
+This callback can be used to validate the value entered in the editable area.
 If **returned false**, then that content will not be added to the editable area.
+
+Validate callback will be called with three arguments, 
+1. CurrentValue - Will have the current value with the edited content
+2. CurrentRange - Will have the new range with the edited content
+3. Info - Will have the info about the edit location
 
 :::tip
 
@@ -54,7 +59,32 @@ Only **false** can prevent the content addition, all other values will be consid
 
 :::danger
 
-There is no debounce happening in calling the validate function. 
+There is no debounce happening in calling the validate function.
 If you feel, **please implement the debounce inside the validate function**
 
 :::
+
+### Sample Restrictions
+
+```javascript
+const singleLineRestriction = {
+  range: [1, 7, 1, 13],
+  label: "someUniqueLabel",
+};
+
+const multiLineRestriction = {
+  range: [3, 1, 4, 1],
+  label: "someUniqueLabel_1",
+  allowMultiline: true,
+};
+
+const restrictionWithValidate = {
+  range: [3, 1, 4, 1],
+  label: "someUniqueLabel_2",
+  allowMultiline: true,
+  validate: function (currentValue, currentRange, info) {
+    const someRegex = /^[a-z0-9A-Z]*$/;
+    return someRegex.test(currentlyTypedValue);
+  },
+};
+```
