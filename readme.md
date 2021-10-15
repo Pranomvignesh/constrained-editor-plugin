@@ -2,6 +2,17 @@
 
 A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only. Please click here for [Demo](https://monaco-editor-restrict-editable-area.vercel.app/)
 
+## How to install using NPM
+
+```bash
+npm i constrained-editor-plugin --save
+```
+
+Import like this
+
+```javascript
+import constrainedEditor from 'constrained-editor-plugin'
+```
 
 ## Table of Contents <!-- omit in toc -->
 
