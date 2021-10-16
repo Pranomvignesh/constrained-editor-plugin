@@ -6,14 +6,9 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 ## How to install using NPM
 
 ```bash
-npm i constrained-editor-plugin --save
+npm i constrained-editor-plugin
 ```
 
-Import like this
-
-```javascript
-import constrainedEditor from 'constrained-editor-plugin'
-```
 
 ## Table of Contents <!-- omit in toc -->
 
