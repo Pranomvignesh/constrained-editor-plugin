@@ -18,6 +18,7 @@
   padding: 0px 20px;
   gap: 20px;
   height: 100%;
+  overflow: hidden;
 }
 
 .editor {
@@ -30,6 +31,11 @@
   display: flex;
   flex-direction: column;
   flex: 1 1.5 100%;
+  height: 100%;
+  overflow: scroll;
+  padding: 10px 20px;
+  background: var(--ifm-code-background);
+  border-radius: 10px;
 }
 
 .highlightAreas {
@@ -37,6 +43,8 @@
   flex-direction: row;
   gap: 10px;
   align-items: center;
+  justify-content: space-between;
+  width: 250px;
 }
 
 .currentValues {
@@ -47,6 +55,6 @@
 
 .rangeContainer {
   padding: 5px 10px;
-  background: var(--ifm-code-background);
+
   border-radius: 10px;
 }

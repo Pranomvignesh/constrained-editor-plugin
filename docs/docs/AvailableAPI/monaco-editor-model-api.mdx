@@ -1,148 +1,133 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 # Monaco Editor Model
 
-This page will explain about the basic usage of the constrain editor plugin.
+This page will list down all the available APIs added by the Constrained Editor Plugin to the monaco editor model.
 
-## Creating an Instance
+## Available APIs
 
-The instance of the constrain editor has to be created only after the monaco editor is loaded. And monaco editor has to be sent into constructor as a first argument.
+- [getCurrentEditableRanges](#getcurrenteditableranges)
+- [getValueInEditableRanges](#getvalueineditableranges)
+- [disposeRestrictions](#disposerestrictions)
+- [onDidChangeContentInEditableRange](#ondidchangecontentineditablerange)
+- [updateRestrictions](#updaterestrictions)
+- [toggleHighlightOfEditableAreas](#togglehighlightofeditableareas)
 
-```javascript title="./scripts/create-an-instance.js"
-require(['vs/editor/editor.main'], function () {
-  // ...
-  const constrainedInstance = constrainedEditor(monaco);
-  // ...
+### GetCurrentEditableRanges
+
+This API will give the current value of the editable ranges
+
+**Returns [EditableRangeObject](/docs/TypeDefinitions/available-type-definitions#editablerangeobject)**
+
+```javascript
+const instanceOfConstrainedEditor = constrainedEditor(monaco);
+instanceOfConstrainedEditor.initializeIn(monacoEditorInstance);
+const model = monacoEditorInstance.getModel();
+console.log(model.getCurrentEditableRanges());
+```
+
+```json title="Output in console"
+{
+  "utilName": {
+    "allowMultiline": false,
+    "index": 0,
+    "range": {
+      "startLineNumber": 1,
+      "startColumn": 7,
+      "endLineNumber": 1,
+      "endColumn": 12
+    },
+    "originalRange": [1, 7, 1, 12]
+  },
+  "funcDefinition": {
+    "allowMultiline": true,
+    "index": 1,
+    "range": {
+      "startLineNumber": 3,
+      "startColumn": 1,
+      "endLineNumber": 3,
+      "endColumn": 43
+    },
+    "originalRange": [3, 1, 3, 43]
+  }
 }
 ```
 
-Here, monaco instance will be used for checking the incoming editor instances and generating ranges from the array.
+### GetValueInEditableRanges
 
-## Initializing
+This API will return the current value in the Editable Ranges.
 
-Once the constrained editor instance is created,
-it can be used to add the necessary APIs into the editor instance
-via `initializeIn` API.
+**Returns [ValueInEditableRange](/docs/TypeDefinitions/available-type-definitions#valueineditableranges)** : with RangeLabel as key
 
-```javascript title="./scripts/create-an-instance.js"
-require(['vs/editor/editor.main'], function () {
-  const constrainedInstance = constrainedEditor(monaco);
-  const editorInstance = monaco.editor.create(document.getElementById('container'), {
-    value: [
-      'const utils = {};',
-      'function addKeysToUtils(){',
-      '',
-      '}',
-      'addKeysToUtils();'
-    ].join('\n'),
-    language: 'javascript'
-  });
-  constrainedInstance.initializeIn(editorInstance);
+```javascript
+console.log(model.getValueInEditableRanges());
+```
+
+```json title="Output in console"
+{
+  "utilName": "utils",
+  "funcDefinition": "// Enter the content for the function here"
 }
 ```
 
-## Adding Restrictions To Model
+### DisposeRestrictions
 
-After initializing the constrained editor in the editor instance of the monaco editor,
-Restrictions in the model has to be added to the model via `addRestrictionsTo` API.
+This API is used to remove all restrictions from the model.
 
-```javascript title="./scripts/create-an-instance.js"
-const model = editorInstance.getModel();
-constrainedInstance.addRestrictionsTo(model, [
-  {
-    range: [1, 7, 1, 12], // Range of Util Variable name
-    label: "utilName",
-  },
-  {
-    range: [3, 1, 3, 1], // Range of Function definition
-    allowMultiline: true,
-    label: "funcDefinition"
-  },
-]);
+:::info
+**monacoEditorInstance.disposeConstrainer** will internally call this method
+:::
+
+**Returns model** : with all the APIs removed
+
+```javascript
+model.disposeRestrictions(model);
 ```
 
-Now, try typing in the editor, Only places defined in the `addRestrictionsTo` will be editable.All other places will become read-only.
+### OnDidChangeContentInEditableRange
 
-:::tip 
+This API is used to add the callback for listening the changes happened inside the editable ranges.
 
-Label key is optional, yet it will be very useful while fetching the values.
-  
-:::
+#### Parameters
 
+- currentlyChangedContent : [ValueInEditableRange](/docs/TypeDefinitions/available-type-definitions#valueineditableranges)
+- allValuesInEditableRanges: [ValueInEditableRange](/docs/TypeDefinitions/available-type-definitions#valueineditableranges)
+- currentEditableRangeObject : [EditableRangeObject](/docs/TypeDefinitions/available-type-definitions#editablerangeobject)
 
-## Admonitions
-
-Docusaurus has a special syntax to create admonitions and callouts:
-
-    :::tip My tip
-
-    Use this awesome feature option
-
-    :::
-
-    :::danger Take care
-
-    This action is dangerous
-
-    :::
-
-:::tip My tip
-
-Use this awesome feature option
-
-:::
-
-:::danger Take care
-
-This action is dangerous
-
-:::
-
-## MDX and React Components
-
-[MDX](https://mdxjs.com/) can make your documentation more **interactive** and allows using any **React components inside Markdown**:
-
-```jsx
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`)
-    }}>
-    {children}
-  </span>
-);
-
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
-
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+```javascript
+model.onDidChangeContentInEditableRange(function (
+  currentlyChangedContent,
+  allValuesInEditableRanges,
+  currentEditableRangeObject
+) {
+  // Function to execute on content change inside editable ranges
+});
 ```
 
-export const Highlight = ({ children, color }) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: "20px",
-      color: "#fff",
-      padding: "10px",
-      cursor: "pointer",
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`);
-    }}
-  >
-    {children}
-  </span>
-);
+### UpdateRestrictions
 
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
+This API can be used update the contents inside the editable ranges.
 
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+#### Arguments
+- currentValuesAsObject : [ValueInEditableRange](/docs/TypeDefinitions/available-type-definitions#valueineditableranges)
+
+```javascript
+model.updateRestrictions({
+  utilName :'New Util Name',
+  funcDefinition : 'Content to update'
+});
+```
+
+### ToggleHighlightOfEditableAreas
+
+This API is mostly useful during development, this can be used to visually see the editable ranges.
+
+```javascript
+model.toggleHighlightOfEditableAreas();
+```
+
+:::tip
+  This will highlight the single line restrictions and multi line restrictions in different colors
+:::

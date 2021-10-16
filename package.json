@@ -5,8 +5,6 @@
   "directories": {
     "doc": "docs"
   },
-  "type": "module",
-  "module": "./dist/esm/constrainedEditor.js",
   "exports": {
     ".": {
       "require": "./dist/constrainedEditorPlugin.js",
@@ -25,7 +23,7 @@
     "dev": "MODE=development webpack --watch --mode=development -c './src/webpack.config.js'",
     "prepack": "npm run bundle",
     "bundle": "MODE=production webpack --mode=production -c './src/webpack.config.js' && MODE=development webpack --mode=development -c './src/webpack.config.js'",
-    "build": "MODE=production webpack --mode=production -c './src/webpack.config.js'"
+    "build": "MODE=production webpack --mode=production -c './src/webpack.config.js' && cd docs && yarn install && npm run build"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,38 @@
+---
+sidebar_position: 1
+---
+
+# Available Type Definitions
+
+This page will list down all the available Type Definitions in Constrained Editor
+
+## RangeRestrictionObject
+
+```javascript
+  RangeRestrictionObject : Object ({
+    "range" : Array[4], // Should be a positive whole number
+    "allowMultiline" ?: Boolean,
+    "label" ?: String,
+    "validate" ?: Function
+  })
+```
+
+## ValueInEditableRanges
+
+```javascript
+  ValueInEditableRanges : Object ({
+    <RangeLabel:String> : <ValueInRange:String>
+  })
+```
+
+## EditableRangeObject
+
+```javascript
+EditableRangeObject: Object({
+  <RangeLabel:String>: Object({
+    "allowMultiline": Boolean,
+    "range": Monaco.Range,
+    "originalRange": Array[4],
+  })
+});
+```

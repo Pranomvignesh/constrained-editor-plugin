@@ -30,7 +30,7 @@ module.exports = [{
         {
           from: path.join(__dirname, SRC_PATH),
           globOptions: {
-            ignore: ["webpack.config.js"]
+            ignore: ["**/webpack.config.js"]
           },
           to: path.join(__dirname, ESM_FOLDER_PATH)
         }

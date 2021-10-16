@@ -24,6 +24,9 @@ const validators = {
             if (rangeObj.hasOwnProperty('label')) {
               if (typeof rangeObj.label !== 'string') return false;
             }
+            if (rangeObj.hasOwnProperty('validate')) {
+              if (typeof rangeObj.validate !== 'function') return false;
+            }
             return true;
           }
           return false;

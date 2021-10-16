@@ -10,7 +10,7 @@ This page will explain about the basic usage of the constrain editor plugin.
 
 The instance of the constrain editor has to be created only after the monaco editor is loaded. And monaco editor has to be sent into constructor as a first argument.
 
-```javascript title="./scripts/create-an-instance.js"
+```javascript
 require(['vs/editor/editor.main'], function () {
   // ...
   const constrainedInstance = constrainedEditor(monaco);
@@ -26,7 +26,7 @@ Once the constrained editor instance is created,
 it can be used to add the necessary APIs into the editor instance
 via `initializeIn` API.
 
-```javascript title="./scripts/create-an-instance.js"
+```javascript
 require(['vs/editor/editor.main'], function () {
   const constrainedInstance = constrainedEditor(monaco);
   const editorInstance = monaco.editor.create(document.getElementById('container'), {
@@ -48,7 +48,7 @@ require(['vs/editor/editor.main'], function () {
 After initializing the constrained editor in the editor instance of the monaco editor,
 Restrictions in the model has to be added to the model via `addRestrictionsTo` API.
 
-```javascript title="./scripts/create-an-instance.js"
+```javascript
 const model = editorInstance.getModel();
 constrainedInstance.addRestrictionsTo(model, [
   {
@@ -58,91 +58,35 @@ constrainedInstance.addRestrictionsTo(model, [
   {
     range: [3, 1, 3, 1], // Range of Function definition
     allowMultiline: true,
-    label: "funcDefinition"
+    label: "funcDefinition",
   },
 ]);
 ```
 
 Now, try typing in the editor, Only places defined in the `addRestrictionsTo` will be editable.All other places will become read-only.
 
-:::tip 
+:::tip
 
 Label key is optional, yet it will be very useful while fetching the values.
-  
-:::
-
-
-## Admonitions
-
-Docusaurus has a special syntax to create admonitions and callouts:
-
-    :::tip My tip
-
-    Use this awesome feature option
-
-    :::
-
-    :::danger Take care
-
-    This action is dangerous
-
-    :::
-
-:::tip My tip
-
-Use this awesome feature option
 
 :::
 
-:::danger Take care
+## Add Change Listener
 
-This action is dangerous
+A Content Change Listener exclusively for the changes happening in the editable ranges is present in Constrained Editor Plugin.
 
+:::caution
+  This function won't be called if the validate function of **any one** of the range restriction has returned false
 :::
 
-## MDX and React Components
-
-[MDX](https://mdxjs.com/) can make your documentation more **interactive** and allows using any **React components inside Markdown**:
-
-```jsx
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`)
-    }}>
-    {children}
-  </span>
-);
-
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
-
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+```javascript
+model.onDidChangeContentInEditableRange(function (
+  currentlyChangedContent,
+  allValuesInEditableRanges,
+  currentEditableRangeObject
+) {
+  // Function to execute on content change inside editable ranges
+});
 ```
 
-export const Highlight = ({ children, color }) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: "20px",
-      color: "#fff",
-      padding: "10px",
-      cursor: "pointer",
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`);
-    }}
-  >
-    {children}
-  </span>
-);
-
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
-
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+For more information on this API, [click here](/docs/AvailableAPI/monaco-editor-model-api#ondidchangecontentineditablerange)
