@@ -2,6 +2,12 @@
 
 A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only. Please click here for [Demo](https://constrained-editor-plugin.vercel.app/playground) and click here for [Documentation](https://constrained-editor-plugin.vercel.app/)
 
+## Stats
+
+<img href="https://github.com/Pranomvignesh/constrained-editor-plugin/issues" src="https://img.shields.io/github/issues/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"/>
+
+
+<img href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers" src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge">
 
 ## How to install using NPM
 
@@ -12,14 +18,16 @@ npm i constrained-editor-plugin
 
 ## Table of Contents <!-- omit in toc -->
 
-- [Problem Statement](#problem-statement)
-- [Sample code](#sample-code)
-- [Walkthrough of Sample code](#walkthrough-of-sample-code)
-- [Potential Applications](#potential-applications)
-  - [Coding Tutorial Applications](#coding-tutorial-applications)
-  - [Interviewing applications](#interviewing-applications)
-- [Contributions and Issues](#contributions-and-issues)
-- [License](#license)
+- [Stats](#stats)
+- [How to install using NPM](#how-to-install-using-npm)
+  - [Problem Statement](#problem-statement)
+  - [Sample code](#sample-code)
+  - [Walkthrough of Sample code](#walkthrough-of-sample-code)
+  - [Potential Applications](#potential-applications)
+    - [Coding Tutorial Applications](#coding-tutorial-applications)
+    - [Interviewing applications](#interviewing-applications)
+  - [Contributions and Issues](#contributions-and-issues)
+  - [License](#license)
 
 
 ### Problem Statement
