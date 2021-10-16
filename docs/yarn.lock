@@ -3180,10 +3180,10 @@ consola@^2.15.0:
   resolved "https://registry.yarnpkg.com/consola/-/consola-2.15.3.tgz#2e11f98d6a4be71ff72e0bdf07bd23e12cb61550"
   integrity sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==
 
-constrained-editor-plugin@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/constrained-editor-plugin/-/constrained-editor-plugin-1.0.2.tgz#12dbea303eb58b9aed8f2b8890ef9af23676e9ce"
-  integrity sha512-c6dyQ3+4EoBIaln0VHR7G2eZnNeKZ0K0Al5Bnivrg4u7TUxDSoKI9U4WFA6Dqah0D34Kbyg8kxb7j7W++zVr/w==
+constrained-editor-plugin@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/constrained-editor-plugin/-/constrained-editor-plugin-1.0.3.tgz#5f06611e789f065ee3b5bb265893fd933d8da2d0"
+  integrity sha512-74FARXaJk5VuP6YzAL07GVJfrmg4QgtN5Qj/9SrqZmEYh29AqBtPU2ThNmk/7K5Zj150H5jP2+ccw5gUvBk1MQ==
 
 content-disposition@0.5.2:
   version "0.5.2"
