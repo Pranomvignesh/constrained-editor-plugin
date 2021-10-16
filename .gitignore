@@ -3,3 +3,4 @@ package-lock.json
 dist
 .DS_Store
 .vscode
+**/yarn.lock

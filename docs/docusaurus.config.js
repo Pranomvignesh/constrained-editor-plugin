@@ -41,6 +41,7 @@ const config = {
         logo: {
           alt: 'My Logo',
           src: 'img/PvLogo-HD.png',
+          href : "https://www.pranomvignesh.ml"
         },
         items: [
           {
