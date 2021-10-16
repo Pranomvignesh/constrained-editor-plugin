@@ -45,7 +45,8 @@ class ActualPlaygroundComponent extends React.Component {
       ].join('\n'),
       language: 'javascript'
     });
-    this.constrainedInstance = this.constrainedEditor.default(this.monaco);
+    const pluginInstance = (window.constrainedEditor || this.constrainedEditor)
+    this.constrainedInstance = pluginInstance.default(this.monaco);
     this.constrainedInstance.initializeIn(this.editorInstance);
     this.model = this.editorInstance.getModel();
     this.model = this.constrainedInstance.addRestrictionsTo(this.model, [
