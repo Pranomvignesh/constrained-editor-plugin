@@ -21,17 +21,15 @@
 }
 
 .editor {
-  flex: 1 1 100%;
+  flex: 1.5 1 100%;
   border: 1px solid #8f8f8f;
   border-radius: 3px;
-  padding: 10px;
 }
 
 .switches {
   display: flex;
   flex-direction: column;
-  flex: 0 0 auto;
-  width: 350px;
+  flex: 1 1.5 100%;
 }
 
 .highlightAreas {
@@ -45,4 +43,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.rangeContainer {
+  padding: 5px 10px;
+  background: var(--ifm-code-background);
+  border-radius: 10px;
 }

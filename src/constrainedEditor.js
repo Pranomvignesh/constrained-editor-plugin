@@ -12,10 +12,16 @@ export default function constrainedEditor(monaco) {
       "(eg:)constrainedEditor({ range : monaco.range });",
     ].join('\n'));
   }
-  const listenerFn = function (instance) {
-    const model = instance.getModel();
+  /**
+   * 
+   * @param {Object} editorInstance This should be the monaco editor instance.
+   * @description This is the listener function to check whether the cursor is at checkpoints 
+   * (i.e) the point where editable and non editable portions meet
+   */
+  const listenerFn = function (editorInstance) {
+    const model = editorInstance.getModel();
     if (model._isCursorAtCheckPoint) {
-      const selections = instance.getSelections();
+      const selections = editorInstance.getSelections();
       const positions = selections.map(function (selection) {
         return {
           lineNumber: selection.positionLineNumber,
@@ -28,6 +34,11 @@ export default function constrainedEditor(monaco) {
   }
   const _uriRestrictionMap = {};
   const { isInstanceValid, isModelValid, isRangesValid } = validators.initWith(monaco);
+  /**
+   * 
+   * @param {Object} editorInstance This should be the monaco editor instance
+   * @returns {Boolean}
+   */
   const initInEditorInstance = function (editorInstance) {
     if (isInstanceValid(editorInstance)) {
       const domNode = editorInstance.getDomNode();
@@ -46,6 +57,12 @@ export default function constrainedEditor(monaco) {
       )
     }
   }
+  /**
+   * 
+   * @param {Object} model This should be the monaco editor model instance. Refer https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html
+   * @param {*} ranges This should be the array of range objects. Refer constrained editor plugin documentation
+   * @returns model
+   */
   const addRestrictionsTo = function (model, ranges) {
     if (isModelValid(model)) {
       if (isRangesValid(ranges)) {
@@ -71,6 +88,11 @@ export default function constrainedEditor(monaco) {
       )
     }
   }
+  /**
+   * 
+   * @param {Object} model This should be the monaco editor model instance. Refer https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.itextmodel.html
+   * @returns {Boolean} True if the restrictions are removed
+   */
   const removeRestrictionsIn = function (model) {
     if (isModelValid(model)) {
       const uri = model.uri.toString();
@@ -91,6 +113,10 @@ export default function constrainedEditor(monaco) {
       )
     }
   }
+  /**
+   * 
+   * @returns {Boolean} True if the constrainer is disposed
+   */
   const disposeConstrainer = function () {
     if (manipulator._editorInstance) {
       const instance = manipulator._editorInstance;
@@ -105,7 +131,11 @@ export default function constrainedEditor(monaco) {
       }
       return true;
     }
+    return false;
   }
+  /**
+   * @description This function used to make the developer to find the ranges of selected portions
+   */
   const toggleDevMode = function () {
     if (manipulator._editorInstance._isInDevMode) {
       manipulator._editorInstance._isInDevMode = false;

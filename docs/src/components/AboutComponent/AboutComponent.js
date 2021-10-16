@@ -1,28 +1,17 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import styles from './AboutComponent.module.css';
+import CodeBlock from '@theme/CodeBlock';
+
 
 export default function AboutComponent() {
   const command = 'npm i constrained-editor-plugin';
-  const [copyState, setCopyState] = React.useState('Copy');
-  const copyCommand = function () {
-    navigator.clipboard.writeText(command);
-    setCopyState('Copied');
-    setTimeout(function () {
-      setCopyState('Copy');
-    }, 1500);
-  }
   return (
     <>
       <section className={styles.section}>
         <div className={styles.installation}>
           <h2>Installation Command</h2>
-          <code className={styles.installationCommand}>
-            <span>{command}</span>
-            <span className={styles.copyBtn} onClick={copyCommand}>
-              {copyState}
-            </span>
-          </code>
+          <CodeBlock className="language-shell">{command}</CodeBlock>
         </div>
       </section>
       <section className={styles.section}>

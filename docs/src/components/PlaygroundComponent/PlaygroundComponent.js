@@ -3,12 +3,15 @@ import clsx from 'clsx';
 import styles from './PlaygroundComponent.module.css';
 import * as monaco from 'monaco-editor';
 import constrainedEditor from 'constrained-editor-plugin';
+import CodeBlock from '@theme/CodeBlock';
 
 export default class PlaygroundComponent extends React.Component {
   constructor(props) {
     super(props);
     this.monacoContainer = React.createRef();
-    this.values = {};
+    this.state = {
+      values: {}
+    };
   }
   componentWillMount() {
     const baseDir = '/node_modules/monaco-editor/esm/vs/';
@@ -35,7 +38,7 @@ export default class PlaygroundComponent extends React.Component {
       value: [
         'const utils = {};',
         'function addKeysToUtils(){',
-        '',
+        '// Enter the content for the function here',
         '}',
         'addKeysToUtils();'
       ].join('\n'),
@@ -55,14 +58,22 @@ export default class PlaygroundComponent extends React.Component {
         }
       },
       {
-        range: [3, 1, 3, 1], // Range of Function definition
+        range: [3, 1, 3, 43], // Range of Function definition
         allowMultiline: true,
         label: 'funcDefinition'
       }
     ]);
-    this.model.onDidChangeContentInEditableRange(function () {
-      debugger
+    this.model.onDidChangeContentInEditableRange(function (currentlyEdited, allEdited, ranges) {
+      this.setState({
+        values: allEdited
+      })
+    }.bind(this));
+    this.setState({
+      values: this.model.getValueInEditableRanges()
     })
+    window.onresize = function () {
+      this.editorInstance.layout()
+    }.bind(this);
   }
 
   showEditableArea() {
@@ -82,20 +93,26 @@ export default class PlaygroundComponent extends React.Component {
               <label>Highlight Editable Areas</label>
               <input type="checkbox" onClick={() => this.showEditableArea.call(this)} />
             </div>
+            <hr />
             <div>
-              <label>Current Values</label>
+              <h2>Values in Editable Ranges</h2>
               <div className={styles.currentValues}>
-                {/* {Object.keys(this.values).map(label => (
-                  <div>
-                    <div>{label}</div>
-                    <div>{this.values[label]}</div>
+                {Object.keys(this.state.values).map(label => (
+                  <div className={styles.rangeContainer}>
+                    <div><b><i>Label :</i></b>
+                      {label}
+                    </div>
+                    <div><b><i>Value :</i></b>
+                      {/* <pre><code>{this.state.values[label]}</code></pre> */}
+                      <CodeBlock title="/src/myComponent" className="language-js" >{this.state.values[label]}</CodeBlock>
+                    </div>
                   </div>
-                ))} */}
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section >
     );
   }
 }
