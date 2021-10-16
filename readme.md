@@ -2,20 +2,6 @@
 
 A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only. Please click here for [Demo](https://constrained-editor-plugin.vercel.app/playground) and click here for [Documentation](https://constrained-editor-plugin.vercel.app/)
 
-## Stats
-<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/issues">
-<img  src="https://img.shields.io/github/issues/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"/></a>
-
-<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers">
-<img  src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"></a>
-
-## How to install using NPM
-
-```bash
-npm i constrained-editor-plugin
-```
-
-
 ## Table of Contents <!-- omit in toc -->
 
 - [Stats](#stats)
@@ -29,14 +15,26 @@ npm i constrained-editor-plugin
   - [Contributions and Issues](#contributions-and-issues)
   - [License](#license)
 
+## Stats
+<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/issues">
+<img  src="https://img.shields.io/github/issues/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"/></a>
 
-### Problem Statement
+<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers">
+<img  src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"></a>
+
+## How to install using NPM
+
+```bash
+npm i constrained-editor-plugin
+```
+
+## Problem Statement
 
 [Monaco Editor](https://microsoft.github.io/monaco-editor/) is one of the most popular code editors in the market. It is developed by [Microsoft](https://www.microsoft.com/en-in).The Monaco Editor is the code editor that powers [VS Code](https://github.com/Microsoft/vscode). Although it is packed with lot of features, it didn't have the feature to constrain the editable area, which is to basically allow editing in only certain parts of the content.
 
 This plugin solves this issue, and will help you add that functionality into your monaco editor instance, without any performance issues.
 
-### Sample code
+## Sample code
 
 ```javascript
 // Include constrainedEditorPlugin.js in your html.
@@ -75,7 +73,7 @@ require(['vs/editor/editor.main'], function () {
 });
 ```
 
-### Walkthrough of Sample code
+## Walkthrough of Sample code
 
 - `constrainedEditor` is the globally available class to create an instance of the `ConstrainedEditor`. This instance has to be created by sending in the `monaco` variable as an argument.
 
@@ -85,22 +83,22 @@ require(['vs/editor/editor.main'], function () {
 
 > For detailed documentation on available APIs, [click here](http://www.github.com/Pranomvignesh)
 
-### Potential Applications
+## Potential Applications
 
-#### Coding Tutorial Applications
+### Coding Tutorial Applications
 
 This plugin can be used in applications which teach programming tutorials, where the application can be made in such as way that it allows users to edit in only certain places
 
-#### Interviewing applications
+### Interviewing applications
 
 This can be used to prevent the candidate to accidentally mess up the boilerplate code given to them.
 
 
-### Contributions and Issues 
+## Contributions and Issues 
 
 This project is open source and you are welcome to add more features to this plugin.
 
 If your find any issue, please raise it [here](https://github.com/Pranomvignesh/constrained-editor-plugin/issues)
 
-### License
+## License
 Licensed under the MIT License.
