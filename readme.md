@@ -6,16 +6,17 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 
 - [Stats](#stats)
 - [How to install using NPM](#how-to-install-using-npm)
-  - [Problem Statement](#problem-statement)
-  - [Sample code](#sample-code)
-  - [Walkthrough of Sample code](#walkthrough-of-sample-code)
-  - [Potential Applications](#potential-applications)
-    - [Coding Tutorial Applications](#coding-tutorial-applications)
-    - [Interviewing applications](#interviewing-applications)
-  - [Contributions and Issues](#contributions-and-issues)
-  - [License](#license)
+- [Problem Statement](#problem-statement)
+- [Sample code](#sample-code)
+- [Walkthrough of Sample code](#walkthrough-of-sample-code)
+- [Potential Applications](#potential-applications)
+  - [Coding Tutorial Applications](#coding-tutorial-applications)
+  - [Interviewing applications](#interviewing-applications)
+- [Contributions and Issues](#contributions-and-issues)
+- [License](#license)
 
 ## Stats
+
 <a href="https://github.com/Pranomvignesh/constrained-editor-plugin/issues">
 <img  src="https://img.shields.io/github/issues/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"/></a>
 
