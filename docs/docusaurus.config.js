@@ -40,8 +40,7 @@ const config = {
         title: SITE_NAME,
         logo: {
           alt: 'My Logo',
-          src: 'img/PvLogo-HD.png',
-          href : "https://www.pranomvignesh.ml"
+          src: 'img/PvLogo-HD.png'
         },
         items: [
           {
@@ -77,6 +76,10 @@ const config = {
           {
             title: 'About me',
             items: [
+              {
+                label : 'Personal Website',
+                href: 'https://pranomvignesh.ml'
+              },
               {
                 label: 'Github',
                 href: 'https://github.com/Pranomvignesh',
