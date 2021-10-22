@@ -82,7 +82,7 @@ require(['vs/editor/editor.main'], function () {
   
 - `constrainedEditor.addRestrictionsTo(model,restrictions)` is where the constrained editor will add restrictions to the model. 
 
-> For detailed documentation on available APIs, [click here](http://www.github.com/Pranomvignesh)
+> For detailed documentation on available APIs, [click here](https://constrained-editor-plugin.vercel.app/docs/AvailableAPI/constrained-editor-instance-api)
 
 ## Potential Applications
 
