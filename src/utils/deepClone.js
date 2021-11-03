@@ -1,4 +1,4 @@
-const deepClone = (function () {
+export const deepClone = (function () {
   const byPassPrimitives = function (value, callback) {
     if (typeof value !== 'object' || value === null) {
       return this.freeze ? Object.freeze(value) : value;

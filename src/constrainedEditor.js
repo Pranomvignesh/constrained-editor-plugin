@@ -1,8 +1,8 @@
 import validators from './utils/validators.js';
 import { TypeMustBe } from './utils/definedErrors.js';
-import constrainModel from './constrainModel.js';
+import constrainedModel from './constrainedModel.js';
 
-export default function constrainedEditor(monaco) {
+export function constrainedEditor(monaco) {
   /**
    * Injected Dependencies
    */
@@ -66,9 +66,9 @@ export default function constrainedEditor(monaco) {
   const addRestrictionsTo = function (model, ranges) {
     if (isModelValid(model)) {
       if (isRangesValid(ranges)) {
-        const constrainedModel = constrainModel(model, ranges, monaco, manipulator._editorInstance);
-        _uriRestrictionMap[constrainedModel.uri.toString()] = constrainedModel;
-        return constrainedModel;
+        const modelToConstrain = constrainedModel(model, ranges, monaco, manipulator._editorInstance);
+        _uriRestrictionMap[modelToConstrain.uri.toString()] = modelToConstrain;
+        return modelToConstrain;
       } else {
         throw new Error(
           TypeMustBe(
@@ -201,3 +201,5 @@ export default function constrainedEditor(monaco) {
   }
   return Object.freeze(API);
 }
+
+export default constrainedEditor;

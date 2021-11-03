@@ -5,14 +5,11 @@
   "directories": {
     "doc": "docs"
   },
+  "type": "module",
   "exports": {
-    ".": {
-      "require": "./dist/constrainedEditorPlugin.js",
-      "import": "./dist/esm/constrainedEditor.js",
-      "default": "./dist/constrainedEditorPlugin.js"
-    },
     "./deepClone": "./dist/esm/utils/deepClone.js",
-    "./enums": "./dist/esm/utils/enums.js"
+    "./enums": "./dist/esm/utils/enums.js",
+    ".": "./dist/esm/constrainedEditor.js"
   },
   "scripts": {
     "test": "./node_modules/.bin/live-server --entry-file=./test/index.html --port=6060 --open=/?random=false",
@@ -20,10 +17,10 @@
     "release": "standard-version",
     "amend": "git commit . --amend -m \"$(git log -1 --pretty=%B)\"",
     "start": "cd docs && npm run start",
-    "dev": "MODE=development webpack --watch --mode=development -c './src/webpack.config.js'",
+    "dev": "MODE=production webpack --mode=production -c './src/webpack.config.cjs' && MODE=development webpack --mode=development --watch -c './src/webpack.config.cjs'",
     "prepack": "npm run bundle",
-    "bundle": "MODE=production webpack --mode=production -c './src/webpack.config.js' && MODE=development webpack --mode=development -c './src/webpack.config.js'",
-    "build": "MODE=production webpack --mode=production -c './src/webpack.config.js' && cd docs && yarn install && npm run build"
+    "bundle": "MODE=production webpack --mode=production -c './src/webpack.config.cjs' && MODE=development webpack --mode=development -c './src/webpack.config.cjs'",
+    "build": "MODE=production webpack --mode=production -c './src/webpack.config.cjs' && cd docs && yarn install && npm run build"
   },
   "repository": {
     "type": "git",

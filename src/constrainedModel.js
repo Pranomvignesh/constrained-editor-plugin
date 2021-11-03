@@ -1,6 +1,6 @@
 import deepClone from './utils/deepClone.js';
 import enums from './utils/enums.js';
-const constrainModel = function (model, ranges, monaco) {
+export const constrainedModel = function (model, ranges, monaco) {
   const rangeConstructor = monaco.Range;
   const sortRangesInAscendingOrder = function (rangeObject1, rangeObject2) {
     const rangeA = rangeObject1.range;
@@ -496,4 +496,4 @@ const constrainModel = function (model, ranges, monaco) {
   }
   return model;
 }
-export default constrainModel;
+export default constrainedModel;
