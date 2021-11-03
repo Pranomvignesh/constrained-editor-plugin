@@ -2,9 +2,17 @@
 
 A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only. Please click here for [Demo](https://constrained-editor-plugin.vercel.app/playground) and click here for [Documentation](https://constrained-editor-plugin.vercel.app/)
 
+## Stats <!-- omit in toc -->
+
+<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/issues">
+<img  src="https://img.shields.io/github/issues/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"/></a>
+
+<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers">
+<img  src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"></a>
+
 ## Table of Contents <!-- omit in toc -->
 
-- [Stats](#stats)
+- [Demo](#demo)
 - [How to install using NPM](#how-to-install-using-npm)
 - [Problem Statement](#problem-statement)
 - [Sample code](#sample-code)
@@ -15,13 +23,10 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 - [Contributions and Issues](#contributions-and-issues)
 - [License](#license)
 
-## Stats
+## Demo
 
-<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/issues">
-<img  src="https://img.shields.io/github/issues/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"/></a>
+https://user-images.githubusercontent.com/29809906/140050216-893552e3-f26d-4890-8650-21d83637cf06.mov
 
-<a href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers">
-<img  src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"></a>
 
 ## How to install using NPM
 
