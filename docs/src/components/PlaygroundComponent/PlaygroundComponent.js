@@ -105,8 +105,8 @@ class ActualPlaygroundComponent extends React.Component {
             <div>
               <h2>Values in Editable Ranges</h2>
               <div className={styles.currentValues}>
-                {Object.keys(this.state.values).map(label => (
-                  <div className={styles.rangeContainer}>
+                {Object.keys(this.state.values).map((label, index) => (
+                  <div key={index} className={styles.rangeContainer}>
                     <div><b><i>Label : </i></b>
                       {label}
                     </div>
