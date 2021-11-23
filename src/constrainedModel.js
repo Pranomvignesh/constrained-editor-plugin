@@ -133,6 +133,7 @@ export const constrainedModel = function (model, ranges, monaco) {
     delete model._editableRangeChangeListener;
     delete model._restrictionChangeListener;
     delete model._oldDecorations;
+    delete model._oldDecorationsSource;
     return model;
   }
   const isCursorAtCheckPoint = function (positions) {
@@ -168,6 +169,14 @@ export const constrainedModel = function (model, ranges, monaco) {
       model.editInRestrictedArea = true;
       model.undo();
       model.editInRestrictedArea = false;
+      if (model._hasHighlight && model._oldDecorationsSource) {
+        // id present in the decorations info will be omitted by monaco
+        // So we don't need to remove the old decorations id
+        model.deltaDecorations(model._oldDecorations, model._oldDecorationsSource);
+        model._oldDecorationsSource.forEach(function (object) {
+          object.range = model.getDecorationRange(object.id);
+        });
+      }
     });
   };
   const updateRange = function (restriction, range, finalLine, finalColumn, changes, changeIndex) {
@@ -317,10 +326,14 @@ export const constrainedModel = function (model, ranges, monaco) {
         return decoration;
       });
       model._oldDecorations = model.deltaDecorations([], decorations);
+      model._oldDecorationsSource = decorations.map(function (decoration, index) {
+        return Object.assign({}, decoration, { id: model._oldDecorations[index] });
+      });
       model._hasHighlight = true;
     } else {
       model.deltaDecorations(model._oldDecorations, []);
       delete model._oldDecorations;
+      delete model._oldDecorationsSource;
       model._hasHighlight = false;
     }
   }
@@ -348,6 +361,7 @@ export const constrainedModel = function (model, ranges, monaco) {
     const isUndoing = contentChangedEvent.isUndoing;
     model._isRestrictedValueValid = true;
     if (!(isUndoing && model.editInRestrictedArea)) {
+
       const changes = contentChangedEvent.changes.sort(sortRangesInAscendingOrder);
       const rangeMap = {};
       const length = restrictions.length;
@@ -459,6 +473,11 @@ export const constrainedModel = function (model, ranges, monaco) {
             return; // Breaks the loop and prevents the triggerChangeListener
           }
           currentlyEditedRanges[rangeString] = value;
+        }
+        if (model._hasHighlight) {
+          model._oldDecorationsSource.forEach(function (object) {
+            object.range = model.getDecorationRange(object.id);
+          });
         }
         triggerChangeListenersWith(currentlyEditedRanges, values);
       } else {
