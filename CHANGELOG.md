@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/Pranomvignesh/constrained-editor-plugin/compare/v1.0.4...v1.0.5) (2021-11-23)
+
+
+### Bug Fixes
+
+* **highlight-areas-mismatch:** the decorations are updated on undo with the previous state ([f07f6a4](https://github.com/Pranomvignesh/constrained-editor-plugin/commit/f07f6a4afa61f11436f17eecc6e4c51b742e5bcf)), closes [#4](https://github.com/Pranomvignesh/constrained-editor-plugin/issues/4)
+
 ### [1.0.4](https://github.com/Pranomvignesh/constrained-editor-plugin/compare/v1.0.3...v1.0.4) (2021-11-03)
 
 
