@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.6](https://github.com/Pranomvignesh/constrained-editor-plugin/compare/v1.0.5...v1.0.6) (2021-12-09)
+
+
+### Bug Fixes
+
+* **sort-issue-in-firefox:** sorting won't work the same in all browsers ([32bcc2b](https://github.com/Pranomvignesh/constrained-editor-plugin/commit/32bcc2bf4cce53266768b70bcf31ef01ea7f398f)), closes [#7](https://github.com/Pranomvignesh/constrained-editor-plugin/issues/7)
+
 ### [1.0.5](https://github.com/Pranomvignesh/constrained-editor-plugin/compare/v1.0.4...v1.0.5) (2021-11-23)
 
 
