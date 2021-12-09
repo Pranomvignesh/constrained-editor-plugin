@@ -9,7 +9,7 @@ export const constrainedModel = function (model, ranges, monaco) {
       rangeA[0] < rangeB[0] ||
       (rangeA[0] === rangeB[0] && rangeA[3] < rangeB[1])
     ) {
-      return 1;
+      return -1;
     }
   }
   const normalizeRange = function (range, content) {
@@ -361,7 +361,6 @@ export const constrainedModel = function (model, ranges, monaco) {
     const isUndoing = contentChangedEvent.isUndoing;
     model._isRestrictedValueValid = true;
     if (!(isUndoing && model.editInRestrictedArea)) {
-
       const changes = contentChangedEvent.changes.sort(sortRangesInAscendingOrder);
       const rangeMap = {};
       const length = restrictions.length;
