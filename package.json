@@ -1,6 +1,6 @@
 {
   "name": "constrained-editor-plugin",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only",
   "directories": {
     "doc": "docs"
