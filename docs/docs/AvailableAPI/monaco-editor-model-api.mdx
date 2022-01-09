@@ -4,20 +4,21 @@ sidebar_position: 2
 
 # Monaco Editor Model
 
-This page will list down all the available APIs added by the Constrained Editor Plugin to the monaco editor model.
+This page will list down all the available methods added by the Constrained Editor Plugin to the monaco editor model.
 
-## Available APIs
+## Available methods
 
 - [getCurrentEditableRanges](#getcurrenteditableranges)
 - [getValueInEditableRanges](#getvalueineditableranges)
 - [disposeRestrictions](#disposerestrictions)
 - [onDidChangeContentInEditableRange](#ondidchangecontentineditablerange)
+- [updateValueInEditableRanges](#updatevalueineditableranges)
 - [updateRestrictions](#updaterestrictions)
 - [toggleHighlightOfEditableAreas](#togglehighlightofeditableareas)
 
 ### GetCurrentEditableRanges
 
-This API will give the current value of the editable ranges
+This method will give the current value of the editable ranges
 
 **Returns [EditableRangeObject](/docs/TypeDefinitions/available-type-definitions#editablerangeobject)**
 
@@ -57,7 +58,7 @@ console.log(model.getCurrentEditableRanges());
 
 ### GetValueInEditableRanges
 
-This API will return the current value in the Editable Ranges.
+This method will return the current value in the Editable Ranges.
 
 **Returns [ValueInEditableRange](/docs/TypeDefinitions/available-type-definitions#valueineditableranges)** : with RangeLabel as key
 
@@ -74,13 +75,13 @@ console.log(model.getValueInEditableRanges());
 
 ### DisposeRestrictions
 
-This API is used to remove all restrictions from the model.
+This method is used to remove all restrictions from the model.
 
 :::info
 **monacoEditorInstance.disposeConstrainer** will internally call this method
 :::
 
-**Returns model** : with all the APIs removed
+**Returns model** : with all the methods removed
 
 ```javascript
 model.disposeRestrictions(model);
@@ -88,7 +89,7 @@ model.disposeRestrictions(model);
 
 ### OnDidChangeContentInEditableRange
 
-This API is used to add the callback for listening the changes happened inside the editable ranges.
+This method is used to add the callback for listening the changes happened inside the editable ranges.
 
 #### Parameters
 
@@ -106,28 +107,46 @@ model.onDidChangeContentInEditableRange(function (
 });
 ```
 
-### UpdateRestrictions
+### UpdateValueInEditableRanges
 
-This API can be used update the contents inside the editable ranges.
+This method can be used update the contents inside the editable ranges.
 
 #### Arguments
+
 - currentValuesAsObject : [ValueInEditableRange](/docs/TypeDefinitions/available-type-definitions#valueineditableranges)
 
 ```javascript
-model.updateRestrictions({
-  utilName :'New Util Name',
-  funcDefinition : 'Content to update'
+model.updateValueInEditableRanges({
+  utilName: "New Util Name",
+  funcDefinition: "Content to update",
 });
+```
+
+### UpdateRestrictions
+
+This method can be used to change the entire restrictions of the model.
+
+#### Arguments
+
+- newRestrictions : Array<[RangeRestrictionObject](/docs/TypeDefinitions/available-type-definitions#rangerestrictionobject)>
+
+```javascript
+model.updateRestrictions([
+  {
+    range: [1, 1, 1, 6],
+    label: "variableDeclarator"
+  }
+]);
 ```
 
 ### ToggleHighlightOfEditableAreas
 
-This API is mostly useful during development, this can be used to visually see the editable ranges.
+This method is mostly useful during development, this can be used to visually see the editable ranges.
 
 ```javascript
 model.toggleHighlightOfEditableAreas();
 ```
 
 :::tip
-  This will highlight the single line restrictions and multi line restrictions in different colors
+This will highlight the single line restrictions and multi line restrictions in different colors
 :::

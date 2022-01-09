@@ -62,6 +62,7 @@ describe('Restrict Edit Area', function () {
       'editInRestrictedArea',
       'getCurrentEditableRanges',
       'getValueInEditableRanges',
+      'updateValueInEditableRanges',
       'disposeRestrictions',
       'onDidChangeContentInEditableRange',
       'updateRestrictions'
@@ -643,6 +644,43 @@ describe('Restrict Edit Area', function () {
       })
     })
   })
+  describe('Updating Value via API', function () {
+    let model, defaultValue;
+    beforeEach(function () {
+      defaultValue = [
+        '123321abc',
+        '456',
+        '789'
+      ].join('\n');
+      model = monaco.editor.createModel(defaultValue, 'javascript');
+      instanceOfConstrainedEditor.addRestrictionsTo(model, [
+        {
+          range: [1, 1, 2, 4],
+          allowMultiline: true,
+          label: 'test'
+        }
+      ]);
+      editorInstance.setModel(model);
+    })
+    it('Content Of Bigger Size', function () {
+      domNode.dispatchEvent(new Event('keydown'))
+      model.updateValueInEditableRanges({
+        test: `ABCDEFG\nHIJKLMNO\nPQRSTU\nVWXYZ`
+      })
+      expect(model.getValue()).toEqual('ABCDEFG\nHIJKLMNO\nPQRSTU\nVWXYZ\n789');
+      const currentRanges = model.getCurrentEditableRanges();
+      expect(stringifyRange(currentRanges.test.range)).toBe(new monaco.Range(1, 1, 4, 6).toString());
+    })
+    it('Content Of Smaller Size', function () {
+      domNode.dispatchEvent(new Event('keydown'))
+      model.updateValueInEditableRanges({
+        test: 'XYZ'
+      })
+      expect(model.getValue()).toEqual('XYZ\n789');
+      const currentRanges = model.getCurrentEditableRanges();
+      expect(stringifyRange(currentRanges.test.range)).toBe(new monaco.Range(1, 1, 1, 4).toString());
+    })
+  })
   describe('Cumulative Change Of Range', function () {
     describe('Replace Value in Multi Line Range', function () {
       describe('Single Line Change', function () {
@@ -1009,6 +1047,7 @@ describe('Restrict Edit Area', function () {
         'editInRestrictedArea',
         'disposeRestrictions',
         'getValueInEditableRanges',
+        'updateValueInEditableRanges',
         'updateRestrictions',
         'getCurrentEditableRanges',
         '_isRestrictedModel',
@@ -1055,6 +1094,7 @@ describe('Restrict Edit Area', function () {
         'editInRestrictedArea',
         'disposeRestrictions',
         'getValueInEditableRanges',
+        'updateValueInEditableRanges',
         'updateRestrictions',
         'getCurrentEditableRanges',
         '_isRestrictedModel',

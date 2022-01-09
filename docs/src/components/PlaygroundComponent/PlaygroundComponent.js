@@ -43,6 +43,7 @@ class ActualPlaygroundComponent extends React.Component {
         '}',
         'addKeysToUtils();'
       ].join('\n'),
+      trimAutoWhitespace: false,
       language: 'javascript'
     });
     const pluginInstance = (window.constrainedEditor || this.constrainedEditor.default)
@@ -54,7 +55,6 @@ class ActualPlaygroundComponent extends React.Component {
         range: [1, 7, 1, 12], // Range of Util Variable name
         label: 'utilName',
         validate: function (currentlyTypedValue, newRange, info) {
-          // console.log({ currentlyTypedValue });
           const noSpaceAndSpecialChars = /^[a-z0-9A-Z]*$/;
           return noSpaceAndSpecialChars.test(currentlyTypedValue);
         }

@@ -117,12 +117,48 @@ export const constrainedModel = function (model, ranges, monaco) {
       return acc;
     }, {});
   }
+  const updateValueInEditableRanges = function (object, forceMoveMarkers) {
+    if (typeof object === 'object' && !Array.isArray(object)) {
+      forceMoveMarkers = typeof forceMoveMarkers === 'boolean' ? forceMoveMarkers : false;
+      const restrictionsMap = restrictions.reduce(function (acc, restriction) {
+        if (restriction.label) {
+          acc[restriction.label] = restriction;
+        }
+        return acc;
+      }, {});
+      for (let label in object) {
+        const restriction = restrictionsMap[label];
+        if (restriction) {
+          const value = object[label];
+          if (doesChangeHasMultilineConflict(restriction, value)) {
+            throw new Error('Multiline change is not allowed for ' + label);
+          }
+          const newRange = deepClone(restriction.range);
+          newRange.endLine = newRange.startLine + value.split('\n').length - 1;
+          newRange.endColumn = value.split('\n').pop().length;
+          if (isChangeInvalidAsPerUser(restriction, value, newRange)) {
+            throw new Error('Change is invalidated by validate function of ' + label);
+          }
+          model.applyEdits([{
+            forceMoveMarkers: !!forceMoveMarkers,
+            range: restriction.range,
+            text: value
+          }]);
+        } else {
+          console.error('No restriction found for ' + label);
+        }
+      }
+    } else {
+      throw new Error('Value must be an object');//No I18n
+    }
+  }
   const disposeRestrictions = function () {
     model._restrictionChangeListener.dispose();
     window.removeEventListener("error", handleUnhandledPromiseRejection);
     delete model.editInRestrictedArea;
     delete model.disposeRestrictions;
     delete model.getValueInEditableRanges;
+    delete model.updateValueInEditableRanges;
     delete model.updateRestrictions;
     delete model.getCurrentEditableRanges;
     delete model.toggleHighlightOfEditableAreas;
@@ -345,6 +381,12 @@ export const constrainedModel = function (model, ranges, monaco) {
       const restriction = rangeMap[key];
       restriction.range = restriction.prevRange;
     }
+  };
+  const doesChangeHasMultilineConflict = function (restriction, text) {
+    return !restriction.allowMultiline && text.includes('\n');
+  };
+  const isChangeInvalidAsPerUser = function (restriction, value, range) {
+    return restriction.validate && !restriction.validate(value, range, restriction.lastInfo);
   }
 
   const manipulatorApi = {
@@ -372,7 +414,7 @@ export const constrainedModel = function (model, ranges, monaco) {
           const restriction = restrictions[i];
           const range = restriction.range;
           if (range.containsRange(editedRange)) {
-            if (!restriction.allowMultiline && change.text.includes('\n')) {
+            if (doesChangeHasMultilineConflict(restriction, change.text)) {
               return false;
             }
             rangeMap[rangeAsString] = restriction;
@@ -466,7 +508,7 @@ export const constrainedModel = function (model, ranges, monaco) {
           const range = restriction.range;
           const rangeString = restriction.label || range.toString();
           const value = values[rangeString];
-          if (restriction.validate && !restriction.validate(value, range, restriction.lastInfo)) {
+          if (isChangeInvalidAsPerUser(restriction, value, range)) {
             setAllRangesToPrev(rangeMap);
             doUndo();
             return; // Breaks the loop and prevents the triggerChangeListener
@@ -494,6 +536,7 @@ export const constrainedModel = function (model, ranges, monaco) {
     disposeRestrictions: disposeRestrictions,
     onDidChangeContentInEditableRange: addEditableRangeListener,
     updateRestrictions: updateRestrictions,
+    updateValueInEditableRanges: updateValueInEditableRanges,
     toggleHighlightOfEditableAreas: toggleHighlightOfEditableAreas
   }
   for (let funcName in manipulatorApi) {
