@@ -6,6 +6,8 @@ on:
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - uses: actions/stale@v4
         with:
@@ -14,3 +16,4 @@ jobs:
           close-issue-message: 'This issue was closed because it has been stalled for 7 days with no activity.'
           days-before-issue-stale: 30
           days-before-issue-close: 7
+          repo-token: ${{ secrets.STALE_ISSUE_BOT_TOKEN }}
