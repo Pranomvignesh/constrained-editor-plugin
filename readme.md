@@ -10,6 +10,9 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 <a href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers">
 <img  src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"></a>
 
+
+[![CodeQL](https://github.com/Pranomvignesh/constrained-editor-plugin/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Pranomvignesh/constrained-editor-plugin/actions/workflows/codeql-analysis.yml)
+
 ## Table of Contents <!-- omit in toc -->
 
 - [Demo](#demo)
