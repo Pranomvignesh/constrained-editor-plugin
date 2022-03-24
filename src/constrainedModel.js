@@ -399,7 +399,7 @@ export const constrainedModel = function (model, ranges, monaco) {
 
   prepareRestrictions(restrictions);
   model._hasHighlight = false;
-  manipulatorApi._restrictionChangeListener = model.onDidChangeContentFast(function (contentChangedEvent) {
+  manipulatorApi._restrictionChangeListener = model.onDidChangeContent(function (contentChangedEvent) {
     const isUndoing = contentChangedEvent.isUndoing;
     model._isRestrictedValueValid = true;
     if (!(isUndoing && model.editInRestrictedArea)) {
