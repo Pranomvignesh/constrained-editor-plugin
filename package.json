@@ -1,6 +1,6 @@
 {
   "name": "constrained-editor-plugin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A Plugin which adds restrictions to the model of monaco-editor, so that only some parts of the code are editable and rest will become read-only",
   "directories": {
     "doc": "docs"
@@ -51,7 +51,6 @@
     "monaco-editor": "0.24.0",
     "standard-version": "^9.3.1",
     "webpack": "5.37.1",
-    "webpack-cli": "4.7.0",
-    "@skypack/package-check": "^0.2.2"
+    "webpack-cli": "4.7.0"
   }
 }
