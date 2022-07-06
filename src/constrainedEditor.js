@@ -46,6 +46,13 @@ export function constrainedEditor(monaco) {
       manipulator._editorInstance = editorInstance;
       manipulator._editorInstance._isInDevMode = false;
       domNode.addEventListener('keydown', manipulator._listener, true);
+      editorInstance.onDidChangeModel(function () {
+        // domNode - refers old dom node
+        domNode.removeEventListener('keydown', manipulator._listener, true)
+        const newDomNode = editorInstance.getDomNode(); // Gets Current dom node
+        newDomNode.addEventListener('keydown', manipulator._listener, true);
+        domNode = newDomNode;
+      })
       return true;
     } else {
       throw new Error(
