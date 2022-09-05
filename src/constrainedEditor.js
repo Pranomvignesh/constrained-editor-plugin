@@ -41,7 +41,7 @@ export function constrainedEditor(monaco) {
    */
   const initInEditorInstance = function (editorInstance) {
     if (isInstanceValid(editorInstance)) {
-      const domNode = editorInstance.getDomNode();
+      let domNode = editorInstance.getDomNode();
       manipulator._listener = listenerFn.bind(API, editorInstance);
       manipulator._editorInstance = editorInstance;
       manipulator._editorInstance._isInDevMode = false;
