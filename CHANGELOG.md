@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Pranomvignesh/constrained-editor-plugin/compare/v1.0.6...v1.3.0) (2022-09-13)
+
+
+### Features
+
+* **update-value-in-editable-ranges:** this method is modified as per the suggestion in the issue ([798471d](https://github.com/Pranomvignesh/constrained-editor-plugin/commit/798471dcd7d54df45decaf47d56e92ca6d7c7303)), closes [#8](https://github.com/Pranomvignesh/constrained-editor-plugin/issues/8)
+
+
+### Bug Fixes
+
+* let ([1ee7258](https://github.com/Pranomvignesh/constrained-editor-plugin/commit/1ee7258a7b8fc87fee21e574ab37f08813dfab47))
+
 ## [1.2.0](https://github.com/Pranomvignesh/constrained-editor-plugin/compare/v1.0.6...v1.2.0) (2022-03-24)
 
 
