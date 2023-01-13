@@ -20,6 +20,7 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 - [Problem Statement](#problem-statement)
 - [Sample code](#sample-code)
 - [Walkthrough of Sample code](#walkthrough-of-sample-code)
+- [Sample Code for monaco-editor/react](#sample-code-for-monaco-editorreact)
 - [Potential Applications](#potential-applications)
   - [Coding Tutorial Applications](#coding-tutorial-applications)
   - [Interviewing applications](#interviewing-applications)
@@ -91,6 +92,48 @@ require(['vs/editor/editor.main'], function () {
 - `constrainedEditor.addRestrictionsTo(model,restrictions)` is where the constrained editor will add restrictions to the model. 
 
 > For detailed documentation on available APIs, [click here](https://constrained-editor-plugin.vercel.app/docs/AvailableAPI/constrained-editor-instance-api)
+
+## Sample Code for monaco-editor/react
+
+```
+import { useRef } from "react";
+import Editor from "@monaco-editor/react";
+import { constrainedEditor } from "constrained-editor-plugin";
+
+function App() {
+    const editorRef = useRef(null);
+    let blocked = [];
+
+    function handleEditorDidMount(editor, monaco) {
+        editorRef.current = editor;
+
+        const constrainedInstance = constrainedEditor(monaco);
+        const model = editor.getModel();
+        constrainedInstance.initializeIn(editor);
+
+        blocked.push(
+            {
+                range: [1, 1, 2, 10],
+                allowMultiline: true
+            }
+        );
+
+        constrainedInstance.addRestrictionsTo(model, blocked);
+    }
+
+    return (
+        <div className="App" >
+            <Editor
+                onMount={handleEditorDidMount}
+            />
+        </div>
+    );
+}
+
+export default App;
+```
+
+ > Thanks @chethan-devopsnow for the sample code : [Click here](https://github.com/Pranomvignesh/constrained-editor-plugin/issues/6) to view discussion about this code
 
 ## Potential Applications
 
