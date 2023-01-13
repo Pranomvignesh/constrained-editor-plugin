@@ -93,7 +93,7 @@ require(['vs/editor/editor.main'], function () {
 
 ## Sample Code for monaco-editor/react
 
-```
+```javascript
 import { useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { constrainedEditor } from "constrained-editor-plugin";
