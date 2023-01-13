@@ -10,7 +10,6 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 <a href="https://github.com/Pranomvignesh/constrained-editor-plugin/stargazers">
 <img  src="https://img.shields.io/github/stars/Pranomvignesh/constrained-editor-plugin?style=for-the-badge"></a>
 
-
 [![CodeQL](https://github.com/Pranomvignesh/constrained-editor-plugin/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Pranomvignesh/constrained-editor-plugin/actions/workflows/codeql-analysis.yml)
 
 ## Table of Contents <!-- omit in toc -->
@@ -29,8 +28,7 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 
 ## Demo
 
-https://user-images.githubusercontent.com/29809906/140050216-893552e3-f26d-4890-8650-21d83637cf06.mov
-
+<https://user-images.githubusercontent.com/29809906/140050216-893552e3-f26d-4890-8650-21d83637cf06.mov>
 
 ## How to install using NPM
 
@@ -89,7 +87,7 @@ require(['vs/editor/editor.main'], function () {
 
 - `constrainedEditor.initializeIn(editorInstance)` is where the constrained editor will add the necessary functions into the editor instance. The Editor returned by the monaco editor during the monaco.editor.create() call should be sent here.
   
-- `constrainedEditor.addRestrictionsTo(model,restrictions)` is where the constrained editor will add restrictions to the model. 
+- `constrainedEditor.addRestrictionsTo(model,restrictions)` is where the constrained editor will add restrictions to the model.
 
 > For detailed documentation on available APIs, [click here](https://constrained-editor-plugin.vercel.app/docs/AvailableAPI/constrained-editor-instance-api)
 
@@ -101,33 +99,28 @@ import Editor from "@monaco-editor/react";
 import { constrainedEditor } from "constrained-editor-plugin";
 
 function App() {
-    const editorRef = useRef(null);
-    let blocked = [];
+  const editorRef = useRef(null);
+  let restrictions = [];
 
-    function handleEditorDidMount(editor, monaco) {
-        editorRef.current = editor;
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+    const constrainedInstance = constrainedEditor(monaco);
+    const model = editor.getModel();
+    constrainedInstance.initializeIn(editor);
+    restrictions.push({
+      range: [1, 1, 2, 10],
+      allowMultiline: true
+    });
+    constrainedInstance.addRestrictionsTo(model, restrictions);
+  }
 
-        const constrainedInstance = constrainedEditor(monaco);
-        const model = editor.getModel();
-        constrainedInstance.initializeIn(editor);
-
-        blocked.push(
-            {
-                range: [1, 1, 2, 10],
-                allowMultiline: true
-            }
-        );
-
-        constrainedInstance.addRestrictionsTo(model, blocked);
-    }
-
-    return (
-        <div className="App" >
-            <Editor
-                onMount={handleEditorDidMount}
-            />
-        </div>
-    );
+  return (
+    <div className="App">
+      <Editor
+        onMount={handleEditorDidMount}
+      />
+    </div>
+  );
 }
 
 export default App;
@@ -145,12 +138,12 @@ This plugin can be used in applications which teach programming tutorials, where
 
 This can be used to prevent the candidate to accidentally mess up the boilerplate code given to them.
 
-
-## Contributions and Issues 
+## Contributions and Issues
 
 This project is open source and you are welcome to add more features to this plugin.
 
 If your find any issue, please raise it [here](https://github.com/Pranomvignesh/constrained-editor-plugin/issues)
 
 ## License
+
 Licensed under the MIT License.
