@@ -143,8 +143,15 @@ model.updateRestrictions([
 
 This method is mostly useful during development, this can be used to visually see the editable ranges.
 
+#### Arguments
+
+- cssClasses : Object<[cssClasses](/docs/TypeDefinitions/available-type-definitions#cssclasses)>
+
 ```javascript
-model.toggleHighlightOfEditableAreas();
+model.toggleHighlightOfEditableAreas({
+  cssClassForSingleLine : 'customClass--singleLine',
+  cssClassForMultiLine : 'customClass--multiLine'
+});
 ```
 
 :::tip
