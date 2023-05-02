@@ -345,15 +345,17 @@ export const constrainedModel = function (model, ranges, monaco) {
     restrictions = deepClone(ranges).sort(sortRangesInAscendingOrder);
     prepareRestrictions(restrictions);
   };
-  const toggleHighlightOfEditableAreas = function () {
+  const toggleHighlightOfEditableAreas = function (cssClasses) {
     if (!model._hasHighlight) {
+      const cssClassForSingleLine = cssClasses.cssClassForSingleLine ||enums.SINGLE_LINE_HIGHLIGHT_CLASS
+      const cssClassForMultiLine = cssClasses.cssClassForMultiLine ||enums.MULTI_LINE_HIGHLIGHT_CLASS
       const decorations = restrictions.map(function (restriction) {
         const decoration = {
           range: restriction.range,
           options: {
             className: restriction.allowMultiline ?
-              enums.MULTI_LINE_HIGHLIGHT_CLASS :
-              enums.SINGLE_LINE_HIGHLIGHT_CLASS
+              cssClassForMultiLine :
+              cssClassForSingleLine
           }
         }
         if (restriction.label) {
