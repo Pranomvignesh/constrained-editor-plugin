@@ -50,7 +50,7 @@
     "live-server": "1.2.1",
     "monaco-editor": "0.24.0",
     "standard-version": "^9.3.1",
-    "webpack": "5.37.1",
+    "webpack": "5.76.0",
     "webpack-cli": "4.7.0"
   }
 }
