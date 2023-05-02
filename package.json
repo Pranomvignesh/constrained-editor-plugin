@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/Pranomvignesh/constrained-editor-plugin#readme",
   "devDependencies": {
-    "commitizen": "4.2.4",
+    "commitizen": "4.3.0",
     "copy-webpack-plugin": "7.0.0",
     "cz-conventional-changelog": "3.3.0",
     "jasmine": "3.7.0",
