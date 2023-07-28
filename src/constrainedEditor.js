@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.constrainedEditor = void 0;
 /*
 This file is the typescript version of the original src/constrainedEditor.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
 */
@@ -27,7 +26,7 @@ var listenerFn = function (editorInstance) {
         model._currentCursorPositions = selections;
     }
 };
-function constrainedEditor(monaco) {
+export function constrainedEditor(monaco) {
     /**
      * Injected Dependencies
      */
@@ -206,5 +205,4 @@ function constrainedEditor(monaco) {
     }
     return Object.freeze(API);
 }
-exports.constrainedEditor = constrainedEditor;
-exports.default = constrainedEditor;
+export default constrainedEditor;

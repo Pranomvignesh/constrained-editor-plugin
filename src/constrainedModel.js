@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.constrainedModel = void 0;
 /*
 This file is the typescript version of the original src/constrainedModel.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
 */
@@ -454,7 +453,7 @@ var getInfoFrom = function (change, editableRange) {
     }
     return info;
 };
-var constrainedModel = function (model, //TextModel,
+export const constrainedModel = function (model, //TextModel,
 ranges, //Restriction[],
 monaco) {
     var rangeConstructor = monaco.Range;
@@ -639,5 +638,5 @@ monaco) {
     }
     return model;
 };
-exports.constrainedModel = constrainedModel;
-exports.default = exports.constrainedModel;
+
+export default constrainedModel;
