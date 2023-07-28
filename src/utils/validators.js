@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var validators = {
+export const validators = {
     initWith: function (monaco) {
         var dummyDiv = document.createElement('div');
         var dummyEditorInstance = monaco.editor.create(dummyDiv);
@@ -52,4 +50,4 @@ var validators = {
         };
     }
 };
-exports.default = validators;
+export default validators;

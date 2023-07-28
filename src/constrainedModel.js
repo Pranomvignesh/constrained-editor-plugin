@@ -1,13 +1,10 @@
-"use strict";
-/*
-This file is the typescript version of the original src/constrainedModel.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
-*/
-var deepClone_js_1 = require("./utils/deepClone.js");
-var enums_js_1 = require("./utils/enums.js");
+import deepClone from './utils/deepClone.js';
+import enums from './utils/enums.js';
+
 var toggleHighlightOfEditableAreas = function (cssClasses, restrictions, model) {
     if (!model._hasHighlight) {
-        var cssClassForSingleLine_1 = cssClasses.cssClassForSingleLine || enums_js_1.default.SINGLE_LINE_HIGHLIGHT_CLASS;
-        var cssClassForMultiLine_1 = cssClasses.cssClassForMultiLine || enums_js_1.default.MULTI_LINE_HIGHLIGHT_CLASS;
+        var cssClassForSingleLine_1 = cssClasses.cssClassForSingleLine || enums.SINGLE_LINE_HIGHLIGHT_CLASS;
+        var cssClassForMultiLine_1 = cssClasses.cssClassForMultiLine || enums.MULTI_LINE_HIGHLIGHT_CLASS;
         var decorations = restrictions.map(function (restriction) {
             var decoration = {
                 id: "",
@@ -237,7 +234,7 @@ var updateValueInEditableRanges = function (object, forceMoveMarkers, restrictio
                 if (doesChangeHasMultilineConflict(restriction, value)) {
                     throw new Error("Multiline change is not allowed for " + label);
                 }
-                var newRange = (0, deepClone_js_1.default)(restriction.range);
+                var newRange = deepClone(restriction.range);
                 newRange.endLine = newRange.startLine + value.split("\n").length - 1;
                 newRange.endColumn = value.split("\n").pop().length;
                 if (isChangeInvalidAsPerUser(restriction, value, newRange)) {
@@ -456,10 +453,10 @@ export const constrainedModel = function (model, //TextModel,
 ranges, //Restriction[],
 monaco) {
     var rangeConstructor = monaco.Range;
-    var restrictionArgs = (0, deepClone_js_1.default)(ranges).sort(sortRangesInAscendingOrder);
+    var restrictionArgs = deepClone(ranges).sort(sortRangesInAscendingOrder);
     var restrictions = prepareRestrictions(restrictionArgs, model, rangeConstructor);
     var updateRestrictions = function (ranges) {
-        var sortedRestrictions = (0, deepClone_js_1.default)(ranges).sort(sortRangesInAscendingOrder);
+        var sortedRestrictions = deepClone(ranges).sort(sortRangesInAscendingOrder);
         restrictions = prepareRestrictions(sortedRestrictions, model, rangeConstructor);
     };
     var manipulatorApi = {

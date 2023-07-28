@@ -1,10 +1,7 @@
-"use strict";
-/*
-This file is the typescript version of the original src/constrainedEditor.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
-*/
-var validators_1 = require("./utils/validators");
-var definedErrors_1 = require("./utils/definedErrors");
-var constrainedModel_1 = require("./constrainedModel");
+import constrainedModel from "./constrainedModel";
+import validators from "./utils/validators";
+import { TypeMustBe } from "./utils/definedErrors";
+
 /**
  *
  * @param {Object} editorInstance This should be the monaco editor instance.
@@ -35,8 +32,9 @@ export function constrainedEditor(monaco) {
             "(eg:)constrainedEditor({ range : monaco.range });",
         ].join("\n"));
     }
-    var _uriRestrictionMap = {};
-    var _a = validators_1.default.initWith(monaco), isInstanceValid = _a.isInstanceValid, isModelValid = _a.isModelValid, isRangesValid = _a.isRangesValid;
+    const _uriRestrictionMap = {};
+    const { isInstanceValid, isModelValid, isRangesValid } =
+      validators.initWith(monaco);
     /**
      *
      * @param {Object} editorInstance This should be the monaco editor instance
@@ -61,7 +59,7 @@ export function constrainedEditor(monaco) {
             return true;
         }
         else {
-            throw new Error((0, definedErrors_1.TypeMustBe)("ICodeEditor", "editorInstance", "This type interface can be found in monaco editor documentation"));
+            throw new Error(TypeMustBe("ICodeEditor", "editorInstance", "This type interface can be found in monaco editor documentation"));
         }
     };
     /**
@@ -73,16 +71,16 @@ export function constrainedEditor(monaco) {
     var addRestrictionsTo = function (model, ranges) {
         if (isModelValid(model)) {
             if (isRangesValid(ranges)) {
-                var modelToConstrain = (0, constrainedModel_1.default)(model, ranges, monaco);
+                var modelToConstrain = constrainedModel(model, ranges, monaco);
                 _uriRestrictionMap[modelToConstrain.uri.toString()] = modelToConstrain;
                 return modelToConstrain;
             }
             else {
-                throw new Error((0, definedErrors_1.TypeMustBe)("Array<RangeRestrictionObject>", "ranges", "Please refer constrained editor documentation for proper structure"));
+                throw new Error(TypeMustBe("Array<RangeRestrictionObject>", "ranges", "Please refer constrained editor documentation for proper structure"));
             }
         }
         else {
-            throw new Error((0, definedErrors_1.TypeMustBe)("ICodeEditor", "editorInstance", "This type interface can be found in monaco editor documentation"));
+            throw new Error(TypeMustBe("ICodeEditor", "editorInstance", "This type interface can be found in monaco editor documentation"));
         }
     };
     /**
@@ -103,7 +101,7 @@ export function constrainedEditor(monaco) {
             }
         }
         else {
-            throw new Error((0, definedErrors_1.TypeMustBe)("ICodeEditor", "editorInstance", "This type interface can be found in monaco editor documentation"));
+            throw new Error((0,TypeMustBe)("ICodeEditor", "editorInstance", "This type interface can be found in monaco editor documentation"));
         }
     };
     /**

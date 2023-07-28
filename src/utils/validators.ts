@@ -4,7 +4,7 @@ import * as monaco_editor_namespace from "monaco-editor";
 This file is the typescript version of the original src/utils/validators.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
 */
 
-import { Restriction, RestrictionArgs } from "../constrainedModel";
+import { RestrictionArgs } from "../constrainedModel";
 type StandAloneCodeEditor =
   monaco_editor_namespace.editor.IStandaloneCodeEditor;
 type TextModel = monaco_editor_namespace.editor.ITextModel;

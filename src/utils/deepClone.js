@@ -1,10 +1,7 @@
-"use strict";
 /*
 This file is the typescript version of the original src/utils/deepClone.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
 */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deepClone = void 0;
-exports.deepClone = (function () {
+export const deepClone = (function () {
     var byPassPrimitives = function (value, callback) {
         if (typeof value !== 'object' || value === null) {
             return this.freeze ? Object.freeze(value) : value;
@@ -76,4 +73,4 @@ exports.deepClone = (function () {
     }
     return API;
 }());
-exports.default = exports.deepClone;
+export default deepClone;
