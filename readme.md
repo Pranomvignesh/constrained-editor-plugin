@@ -91,7 +91,7 @@ require(['vs/editor/editor.main'], function () {
 
 > For detailed documentation on available APIs, [click here](https://constrained-editor-plugin.vercel.app/docs/AvailableAPI/constrained-editor-instance-api)
 
-## Sample Code for monaco-editor/react
+## Sample Code for monaco-editor react
 
 ```javascript
 import { useRef } from "react";
