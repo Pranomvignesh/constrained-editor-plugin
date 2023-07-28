@@ -19,7 +19,7 @@ A Plugin which adds restrictions to the model of monaco-editor, so that only som
 - [Problem Statement](#problem-statement)
 - [Sample code](#sample-code)
 - [Walkthrough of Sample code](#walkthrough-of-sample-code)
-- [Sample Code for monaco-editor/react](#sample-code-for-monaco-editorreact)
+- [Sample Code for monaco-editor/react](#sample-code-for-monaco-editor-react)
 - [Potential Applications](#potential-applications)
   - [Coding Tutorial Applications](#coding-tutorial-applications)
   - [Interviewing applications](#interviewing-applications)
