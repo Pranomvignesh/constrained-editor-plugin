@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /*
 This file is the typescript version of the original src/constrainedModel.js file from: https://github.com/Pranomvignesh/constrained-editor-plugin
 */
