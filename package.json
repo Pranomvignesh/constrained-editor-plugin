@@ -11,6 +11,7 @@
     "./enums": "./dist/esm/utils/enums.js",
     ".": "./dist/esm/constrainedEditor.js"
   },
+  "main": "./dist/esm/constrainedEditor.js",
   "scripts": {
     "test": "./node_modules/.bin/live-server --entry-file=./test/index.html --port=6060 --open=/?random=false",
     "commit": "git-cz",
