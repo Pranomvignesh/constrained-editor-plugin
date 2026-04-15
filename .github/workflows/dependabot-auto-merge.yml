@@ -4,6 +4,7 @@ name: Auto-merge Dependabot Patch PRs
 on:
   pull_request:
     types: [opened, synchronize]
+  workflow_dispatch:
 
 permissions:
   pull-requests: write
