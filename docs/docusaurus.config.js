@@ -77,7 +77,7 @@ const config = {
             title: 'About me',
             items: [
               {
-                label : 'Personal Website',
+                label: 'Personal Website',
                 href: 'https://pranomvignesh.ml'
               },
               {
