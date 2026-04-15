@@ -2,3 +2,5 @@ node_modules
 dist
 .DS_Store
 .vscode
+package-lock.json
+docs/yarn.lock
